@@ -51,15 +51,26 @@ const clickSounds = CLICK_SOUNDS.map(function (src) {
   audio.preload = "auto";
   return audio;
 });
+// A phone: a touch screen whose short side is phone-sized (either way up).
+function isPhone() {
+  const touch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  return touch && Math.min(screen.width, screen.height) < 600;
+}
+function soundsAllowed() {
+  return SOUNDS_ON_PHONE || !isPhone();
+}
+
 const successSound = new Audio(SUCCESS_SOUND);
 successSound.preload = "auto";
 function playSuccessSound() {
+  if (!soundsAllowed()) return;
   const sound = successSound.cloneNode();
   sound.volume = SUCCESS_VOLUME;
   sound.play().catch(function () {});
 }
 
 function playClickSound() {
+  if (!soundsAllowed()) return;
   const sound = clickSounds[Math.floor(Math.random() * clickSounds.length)].cloneNode();
   sound.volume = CLICK_VOLUME;
   sound.play().catch(function () {}); // ignore if the browser blocks sound

@@ -56,6 +56,7 @@ const CLICK_VOLUME = 0.6;
 // success.mp3 with the 1.4s of silence at the start cut off.
 const SUCCESS_SOUND = "sound/success-trimmed.wav";
 const SUCCESS_VOLUME = 0.7;
+const SOUNDS_ON_PHONE = false;   // phones play no sound effects; set to true to turn them back on
 
 // Animation timings (ms)
 const LOADING_MIN_MS = 900; // the loading screen shows at least this long
