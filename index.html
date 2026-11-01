@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="theme-color" content="#fbf3e1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Happy Little Orders</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,17 +33,26 @@
 
         <div class="abs timer">
           <img src="photos/ui/timer.png" alt="">
+          <svg class="timer-icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="15" cy="14" r="9" fill="#e8342e" stroke="#4b2a19" stroke-width="3"/>
+            <circle cx="49" cy="14" r="9" fill="#e8342e" stroke="#4b2a19" stroke-width="3"/>
+            <path d="M19 57l5-6M45 57l-5-6" stroke="#4b2a19" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="32" cy="35" r="23" fill="#e8342e" stroke="#4b2a19" stroke-width="4"/>
+            <circle cx="32" cy="35" r="16" fill="#fffaf0"/>
+            <path d="M32 25v11l7 5" stroke="#4b2a19" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </svg>
           <div class="timer-text" id="timer">02:00</div>
         </div>
 
         <div class="abs points">
           <img src="photos/ui/star.png" alt="">
-          POINTS
+          <span class="points-label">POINTS</span>
           <span class="points-value" id="points">0</span>
         </div>
 
         <img class="abs customer" id="customer" src="photos/customers/cat-calico.png" alt="Customer">
         <div class="abs customer-stand"></div>
+        <div class="abs phone-counter"></div>
         <img class="abs heart" id="heart" src="photos/ui/heart.png" alt="">
 
         <!-- talk bubble: the customer asking for sauce packets -->
@@ -55,22 +64,60 @@
         <div class="abs order">
           <img src="photos/ui/order-board.png" alt="">
           <div class="order-text">
-            <div class="order-title" id="order-title">ORDER #001</div>
+            <div class="order-title" id="order-title">Order #001</div>
             <div id="order-lines"></div>
           </div>
         </div>
 
-        <!-- middle: ingredients -->
-        <div class="abs ingredients">
-          <div class="card" data-id="burger-bun"><img src="photos/ingredients/burger-bun.png" alt=""><span class="label">bun</span></div>
-          <div class="card" data-id="beef-patty"><img src="photos/ingredients/beef-patty.png" alt=""><span class="label">beef patty</span></div>
-          <div class="card" data-id="cheese"><img src="photos/ingredients/cheese.png" alt=""><span class="label">cheese</span></div>
-          <div class="card" data-id="lettuce"><img src="photos/ingredients/lettuce.png" alt=""><span class="label">lettuce</span></div>
-          <div class="card" data-id="pickles"><img src="photos/ingredients/pickles.png" alt=""><span class="label">pickles</span></div>
-          <div class="card" data-id="tomato"><img src="photos/ingredients/tomato.png" alt=""><span class="label">tomato</span></div>
-          <div class="card" data-id="nuggets"><img src="photos/food/nuggets.png" alt=""><span class="label">nuggets</span></div>
-          <div class="card" data-id="fries"><img src="photos/food/fries.png" alt=""><span class="label">fries</span></div>
-          <div class="card" data-id="chicken-cutlet"><img src="photos/food/hash-brown.png" alt=""><span class="label">chicken cutlet</span></div>
+        <!-- items: on tablets the groups sit around the counter; on phones they
+             become one panel with Food / Drinks / Sides / Sauces tabs -->
+        <div class="item-panel" id="item-panel" data-tab="food">
+          <div class="item-tabs">
+            <button class="item-tab active" type="button" data-tab="food">Food</button>
+            <button class="item-tab" type="button" data-tab="drinks">Drinks</button>
+            <button class="item-tab" type="button" data-tab="sides">Sides</button>
+            <button class="item-tab" type="button" data-tab="sauces">Sauces</button>
+          </div>
+          <div class="item-grid">
+          <div class="abs ingredients">
+            <div class="card" data-id="burger-bun" data-tab="food"><img src="photos/ingredients/burger-bun.png" alt=""><span class="label">bun</span></div>
+            <div class="card" data-id="beef-patty" data-tab="food"><img src="photos/ingredients/beef-patty.png" alt=""><span class="label">beef patty</span></div>
+            <div class="card" data-id="cheese" data-tab="food"><img src="photos/ingredients/cheese.png" alt=""><span class="label">cheese</span></div>
+            <div class="card" data-id="lettuce" data-tab="food"><img src="photos/ingredients/lettuce.png" alt=""><span class="label">lettuce</span></div>
+            <div class="card" data-id="pickles" data-tab="food"><img src="photos/ingredients/pickles.png" alt=""><span class="label">pickles</span></div>
+            <div class="card" data-id="tomato" data-tab="food"><img src="photos/ingredients/tomato.png" alt=""><span class="label">tomato</span></div>
+            <div class="card" data-id="nuggets" data-tab="sides"><img src="photos/food/nuggets.png" alt=""><span class="label">nuggets</span></div>
+            <div class="card" data-id="fries" data-tab="sides"><img src="photos/food/fries.png" alt=""><span class="label">fries</span></div>
+            <div class="card" data-id="chicken-cutlet" data-tab="food"><img src="photos/food/hash-brown.png" alt=""><span class="label">chicken cutlet</span></div>
+          </div>
+
+          <div class="abs drinks">
+            <div class="card" data-id="coffee" data-tab="drinks"><img src="photos/drinks-desserts/coffee.png" alt=""><span class="label">coffee</span></div>
+            <div class="card" data-id="mcflurry" data-tab="drinks"><img src="photos/drinks-desserts/mcflurry.png" alt=""><span class="label">McFlurry</span></div>
+            <div class="card" data-id="ice-cream-cone" data-tab="drinks"><img src="photos/drinks-desserts/ice-cream-cone.png" alt=""><span class="label">ice cream</span></div>
+            <div class="card" data-id="soda" data-tab="drinks"><img src="photos/drinks-desserts/soda.png" alt=""><span class="label">soda</span></div>
+          </div>
+
+          <div class="abs condiments">
+            <div class="card" data-id="ketchup-bottle" data-tab="sauces"><img src="photos/sauces/ketchup-bottle.png" alt="Ketchup"><span class="label">ketchup</span></div>
+            <div class="card" data-id="mustard-bottle" data-tab="sauces"><img src="photos/sauces/mustard-bottle.png" alt="Mustard"><span class="label">mustard</span></div>
+            <div class="card" data-id="mayo-bottle" data-tab="sauces"><img src="photos/sauces/mayo-bottle.png" alt="Mayo"><span class="label">mayo</span></div>
+            <span class="label">condiment</span>
+          </div>
+
+          <div class="abs packets">
+            <div class="card" data-id="ketchup-packet" data-tab="sauces"><img src="photos/sauces/ketchup-packet.png" alt="Ketchup packet"><span class="label">ketchup packet</span></div>
+            <div class="card" data-id="mustard-packet" data-tab="sauces"><img src="photos/sauces/mustard-packet.png" alt="Mustard packet"><span class="label">mustard packet</span></div>
+            <div class="card" data-id="mayo-packet" data-tab="sauces"><img src="photos/sauces/mayo-packet.png" alt="Mayo packet"><span class="label">mayo packet</span></div>
+          </div>
+
+          <div class="abs sauces">
+            <div class="card" data-id="bbq-dip" data-tab="sauces"><img src="photos/sauces/bbq-dip.png" alt="BBQ"><span class="label">BBQ dip</span></div>
+            <div class="card" data-id="sweet-chili-dip" data-tab="sauces"><img src="photos/sauces/sweet-chili-dip.png" alt="Sweet Chili"><span class="label">sweet chili dip</span></div>
+            <div class="card" data-id="sweet-sour-dip" data-tab="sauces"><img src="photos/sauces/sweet-sour-dip.png" alt="Sweet 'n Sour"><span class="label">sweet 'n sour dip</span></div>
+            <span class="label">sauce</span>
+          </div>
+          </div>
         </div>
 
         <button class="abs recipes-btn" id="recipes-btn" type="button">
@@ -78,42 +125,13 @@
           Recipes
         </button>
 
-        <!-- middle: drinks & desserts -->
-        <div class="abs drinks">
-          <div class="card" data-id="coffee"><img src="photos/drinks-desserts/coffee.png" alt=""><span class="label">coffee</span></div>
-          <div class="card" data-id="mcflurry"><img src="photos/drinks-desserts/mcflurry.png" alt=""><span class="label">McFlurry</span></div>
-          <div class="card" data-id="ice-cream-cone"><img src="photos/drinks-desserts/ice-cream-cone.png" alt=""><span class="label">ice cream</span></div>
-          <div class="card" data-id="soda"><img src="photos/drinks-desserts/soda.png" alt=""><span class="label">soda</span></div>
-        </div>
-
-        <div class="abs condiments">
-          <img data-id="ketchup-bottle" src="photos/sauces/ketchup-bottle.png" alt="Ketchup">
-          <img data-id="mustard-bottle" src="photos/sauces/mustard-bottle.png" alt="Mustard">
-          <img data-id="mayo-bottle" src="photos/sauces/mayo-bottle.png" alt="Mayo">
-          <span class="label">condiment</span>
-        </div>
-
-        <!-- bottom: packets, tray, dips -->
-        <div class="abs packets">
-          <img data-id="ketchup-packet" src="photos/sauces/ketchup-packet.png" alt="Ketchup packet">
-          <img data-id="mustard-packet" src="photos/sauces/mustard-packet.png" alt="Mustard packet">
-          <img data-id="mayo-packet" src="photos/sauces/mayo-packet.png" alt="Mayo packet">
-        </div>
-
         <div class="abs tray">
           <img src="photos/ui/tray.png" alt="">
           <div class="tray-food" id="tray-food"></div>
         </div>
 
-        <button class="abs done-btn" id="done-btn" type="button">DONE</button>
+        <button class="abs done-btn" id="done-btn" type="button"><span class="done-label-tablet">DONE</span><span class="done-label-phone">Serve order</span></button>
         <div class="abs points-pop" id="points-pop">+100</div>
-
-        <div class="abs sauces">
-          <div class="card" data-id="bbq-dip"><img src="photos/sauces/bbq-dip.png" alt="BBQ"></div>
-          <div class="card" data-id="sweet-chili-dip"><img src="photos/sauces/sweet-chili-dip.png" alt="Sweet Chili"></div>
-          <div class="card" data-id="sweet-sour-dip"><img src="photos/sauces/sweet-sour-dip.png" alt="Sweet 'n Sour"></div>
-          <span class="label">sauce</span>
-        </div>
 
         <div class="abs floor-line"></div>
         <div class="abs floor"></div>
@@ -260,10 +278,13 @@
           <button class="recipes-close" id="recipes-close" type="button" aria-label="Close">&times;</button>
           <div class="book-header">
             <img src="photos/ui/recipe-book.png" alt="">
-            <h2 class="book-title" id="recipes-title">Recipes</h2>
+            <div class="book-heading">
+              <h2 class="book-title" id="recipes-title">Recipes</h2>
+              <p class="book-sub">Stack your burger from the bottom up.</p>
+            </div>
           </div>
-          <p class="recipes-hint">Start with the bottom bun. Finish with the top.</p>
           <div class="recipes-list" id="recipes-list"></div>
+          <button class="recipes-back" id="recipes-back" type="button">Back to game</button>
         </div>
       </div>
     </div>

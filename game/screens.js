@@ -29,7 +29,7 @@ function allPictures(data) {
   for (const category of Object.keys(data.items)) data.items[category].forEach((item) => add(item.image));
   for (const c of data.customers.customers) { add(c.image); add(c.happy); add(c.angry); }
   for (const src of Object.values(SAUCE_TOPPINGS)) urls.add(new URL(src, location.href).href);
-  ["photos/ingredients/bun-top.png", "photos/ingredients/bun-bottom.png",
+  ["photos/backgrounds/counter.png", "photos/ingredients/bun-top.png", "photos/ingredients/bun-bottom.png",
    "photos/ui/heart.png", "photos/ui/talk-bubble.png"].forEach(add);
   return [...urls];
 }
@@ -81,6 +81,11 @@ function rememberTutorialSeen() {
   try { localStorage.setItem(TUTORIAL_KEY, "1"); } catch (e) { /* ignore */ }
 }
 
+// The phone layout has its own steps (its items are in tabs).
+function tutorialSteps() {
+  return stage.classList.contains("mobile") ? TUTORIAL_STEPS_MOBILE : TUTORIAL_STEPS;
+}
+
 function startTutorial() {
   tutorialRunning = true;
   startGame();              // sets up the first order, but the timer waits
@@ -89,7 +94,7 @@ function startTutorial() {
 }
 
 function nextTutorialStep() {
-  if (tutorialStep < TUTORIAL_STEPS.length - 1) showTutorialStep(tutorialStep + 1);
+  if (tutorialStep < tutorialSteps().length - 1) showTutorialStep(tutorialStep + 1);
   else endTutorial();
 }
 
@@ -102,18 +107,18 @@ function endTutorial() {
 
 function showTutorialStep(index) {
   tutorialStep = index;
-  const step = TUTORIAL_STEPS[index];
-  document.getElementById("tut-step").textContent = (index + 1) + " / " + TUTORIAL_STEPS.length;
+  const step = tutorialSteps()[index];
+  document.getElementById("tut-step").textContent = (index + 1) + " / " + tutorialSteps().length;
   document.getElementById("tut-text").textContent = step.text;
   document.getElementById("tut-next").textContent =
-    index === TUTORIAL_STEPS.length - 1 ? "Let's go!" : "Next";
+    index === tutorialSteps().length - 1 ? "Let's go!" : "Next";
   placeTutorial();
 }
 
 // Puts the spotlight on the target and the popup below it (or above, if there's no room).
 function placeTutorial() {
   if (tutorialEl.hidden) return;
-  const target = document.querySelector(TUTORIAL_STEPS[tutorialStep].target);
+  const target = document.querySelector(tutorialSteps()[tutorialStep].target);
   const stageBox = stage.getBoundingClientRect();
   const scale = stageBox.width / stage.offsetWidth;
   const box = target.getBoundingClientRect();
@@ -144,6 +149,20 @@ function placeTutorial() {
 function openRecipes() {
   recipesOverlay.hidden = false;
   if (!recipesLoaded) loadRecipes();
+  else popRecipeSteps();
+}
+
+// Each burger's ingredients pop in one after another, from the bottom bun up.
+// The burgers start a little after each other, left to right.
+const RECIPE_STEP_MS = 70;   // between ingredients
+const RECIPE_COLUMN_MS = 90; // between burgers
+function popRecipeSteps() {
+  recipesList.querySelectorAll(".recipe").forEach(function (recipe, col) {
+    recipe.querySelectorAll(".recipe-step").forEach(function (step, i) {
+      step.style.animationDelay = (150 + col * RECIPE_COLUMN_MS + i * RECIPE_STEP_MS) + "ms";
+      restartAnimation(step, "pop-in");
+    });
+  });
 }
 
 function closeRecipes() {
@@ -155,6 +174,7 @@ async function loadRecipes() {
     const d = await loadData();
     renderRecipes(d.recipes.recipes, d.items);
     recipesLoaded = true;
+    popRecipeSteps();
   } catch (err) {
     recipesList.innerHTML =
       '<p class="recipes-error">Couldn\'t load the recipes.<br>' +
@@ -210,21 +230,24 @@ function renderRecipes(recipes, items) {
       stack.appendChild(step);
     });
 
-    // sauces as coloured chips (e.g. "ketchup-bottle" gets the "ketchup" colours)
+    // sauces: the bottle pictures, or "No sauce"
     const sauces = document.createElement("div");
     sauces.className = "recipe-sauces";
-    sauces.append("Sauce:");
+    const sauceLabel = document.createElement("span");
+    sauceLabel.className = "sauce-label";
+    sauceLabel.textContent = "Sauce:";
+    sauces.appendChild(sauceLabel);
     if (recipe.sauces.length) {
       recipe.sauces.forEach(function (id) {
         const chip = document.createElement("span");
         chip.className = "sauce-chip " + id.replace("-bottle", "");
-        chip.append(icon(id), (lookup[id] || { name: id }).name);
+        chip.append(icon(id));
         sauces.appendChild(chip);
       });
     } else {
       const chip = document.createElement("span");
       chip.className = "sauce-chip none";
-      chip.textContent = "None";
+      chip.textContent = "No sauce";
       sauces.appendChild(chip);
     }
 
@@ -303,10 +326,12 @@ function clearFieldError(e) {
 // =====================================================================
 // screen size
 window.addEventListener("resize", fit);
+window.addEventListener("resize", fitOrderText);
+if (document.fonts) document.fonts.ready.then(fitOrderText); // the game font changes the text size
 window.addEventListener("resize", placeTutorial);
 
 // items -> tray
-document.querySelectorAll(".card, .condiments img, .packets img").forEach(function (el) {
+document.querySelectorAll(".card").forEach(function (el) {
   el.addEventListener("click", function () { handleItemClick(el); });
   el.addEventListener("animationend", function () { el.classList.remove("press"); });
 });
@@ -328,11 +353,17 @@ document.getElementById("tut-skip-top").addEventListener("click", endTutorial);
 // recipe book
 recipesBtn.addEventListener("click", openRecipes);
 document.getElementById("recipes-close").addEventListener("click", closeRecipes);
+document.getElementById("recipes-back").addEventListener("click", closeRecipes);
 recipesOverlay.addEventListener("click", function (e) {
   if (e.target === recipesOverlay) closeRecipes();
 });
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && !recipesOverlay.hidden) closeRecipes();
+});
+
+// item tabs (phone layout)
+document.querySelectorAll(".item-tab").forEach(function (tab) {
+  tab.addEventListener("click", function () { selectItemTab(tab.dataset.tab); });
 });
 
 // start screen

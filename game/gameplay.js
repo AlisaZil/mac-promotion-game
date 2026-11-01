@@ -35,6 +35,14 @@ function handleItemClick(el) {
   else addItem(src, id);
 }
 
+// Phone layout: shows the cards of one tab (Food, Drinks, Sides or Sauces).
+function selectItemTab(name) {
+  itemPanel.dataset.tab = name;
+  document.querySelectorAll(".item-tab").forEach(function (tab) {
+    tab.classList.toggle("active", tab.dataset.tab === name);
+  });
+}
+
 // How many main items are on the tray (everything except packets and dips).
 function mainItemCount() {
   return trayFood.querySelectorAll(":scope > :not(.packet):not(.dip)").length;
@@ -133,11 +141,15 @@ function addOrderChips(list) {
 }
 
 // Shrinks the board text a little at a time until the whole order fits.
+// Runs again when the font finishes loading and when the screen size changes,
+// because both change how much space the text takes.
 function fitOrderText() {
   let fit = 1;
   orderTextEl.style.setProperty("--fit", fit);
-  const bottom = orderTextEl.clientHeight - 12; // keep clear of the bottom edge
-  while (orderLines.offsetTop + orderLines.offsetHeight > bottom && fit > 0.6) {
+  // the bottom of the space inside the board / bubble (minus its padding)
+  const padBottom = parseFloat(getComputedStyle(orderTextEl).paddingBottom) || 0;
+  const bottom = orderTextEl.clientHeight - Math.max(padBottom, 12);
+  while (orderLines.offsetTop + orderLines.offsetHeight > bottom && fit > 0.5) {
     fit -= 0.05;
     orderTextEl.style.setProperty("--fit", fit);
   }
@@ -145,7 +157,7 @@ function fitOrderText() {
 
 // Shows the current order on the board and its customer at the counter.
 function showOrder(order) {
-  orderTitle.textContent = "ORDER #" + String(orderNumber).padStart(3, "0");
+  orderTitle.textContent = "Order #" + String(orderNumber).padStart(3, "0"); // CSS shows it in capitals on tablets
 
   orderLines.innerHTML = "";
   if (order.burger) addOrderRow(1, order.burger.name);

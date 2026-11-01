@@ -118,6 +118,7 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 }
 /* small header so the items get the attention */
 .order-title {
+  text-transform: uppercase;      /* "ORDER #001" on tablets, "Order #001" on phones */
   color: var(--dark-red);
   font-size: 22px;                /* fixed size: only the items shrink to fit */
   font-weight: 700;
@@ -218,17 +219,34 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
   padding-bottom: 14px;
   cursor: pointer;
 }
-.condiments img { height: 104px; cursor: pointer; }
+.condiments .card {                 /* bottles: no card look on tablets */
+  width: auto; height: auto;
+  background: none; border: none; border-radius: 0; box-shadow: none;
+  display: block;
+}
+.condiments .card img { height: 104px; max-width: none; max-height: none; margin: 0; }
 
 /* ---------- packets ---------- */
 .packets {
   left: 18px; top: 1145px;
   display: flex; flex-direction: column; gap: 6px;
 }
-.packets img { width: 94px; cursor: pointer; }
-.packets img:nth-child(1) { transform: rotate(4deg); }
-.packets img:nth-child(2) { transform: rotate(-4deg); }
-.packets img:nth-child(3) { transform: rotate(5deg); }
+.packets .card {                    /* packets: no card look on tablets */
+  width: auto; height: auto;
+  background: none; border: none; border-radius: 0; box-shadow: none;
+  display: block;
+}
+.packets .card img { width: 94px; max-width: none; max-height: none; margin: 0; }
+.packets .card:nth-child(1) { transform: rotate(4deg); }
+.packets .card:nth-child(2) { transform: rotate(-4deg); }
+.packets .card:nth-child(3) { transform: rotate(5deg); }
+
+/* item names are only shown on the bottles / packets / dips in the phone layout */
+.condiments .card .label, .packets .card .label, .sauces .card .label { display: none; }
+
+/* phone-only pieces, hidden on tablets */
+.item-panel, .item-grid { display: contents; }
+.item-tabs, .timer-icon, .done-label-phone, .phone-counter { display: none; }
 
 
 /* ---------- tray ---------- */
@@ -366,75 +384,6 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
   font-weight: 700;
   letter-spacing: 2px;
 }
-/* recipe book layout */
-.book-panel {
-  width: 860px;
-  padding: 30px 30px 32px;
-  border-color: #5e4535;
-  box-shadow: 0 0 0 7px #f6d77e;
-}
-.book-panel .recipes-close { top: 26px; right: 28px; width: 64px; height: 64px; }
-
-.book-header { display: flex; align-items: center; justify-content: center; gap: 22px; }
-.book-header img { width: 168px; }
-.book-title { font-size: 80px; font-weight: 700; line-height: 1; color: var(--brown); }
-
-.recipes-hint {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 600;
-  margin: 12px 0 24px;
-}
-
-.recipes-list { display: flex; flex-direction: column; gap: 14px; }
-
-.recipe {
-  padding: 16px 26px 16px;
-  background: #fffaf0;
-  border: 4px solid #ecd6ae;
-  border-radius: 24px;
-}
-.recipe-name { font-size: 40px; font-weight: 700; line-height: 1.1; margin-bottom: 12px; }
-
-/* steps, bottom bun first */
-.recipe-stack {
-  display: flex; align-items: center; gap: 7px;
-  padding-bottom: 12px;
-  border-bottom: 3px solid #f0e2c8;
-}
-.recipe-step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.recipe-bubble {
-  width: 66px; height: 66px;
-  border-radius: 50%;
-  background: #f6ead5;
-  display: grid; place-items: center;
-}
-.recipe-bubble img { width: 56px; height: 48px; object-fit: contain; }
-.recipe-arrow {               /* small triangle pointing to the next step */
-  width: 0; height: 0;
-  border-left: 9px solid #5e4535;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-}
-
-/* sauces as coloured chips */
-.recipe-sauces {
-  display: flex; align-items: center; gap: 16px;
-  margin-top: 12px;
-  font-size: 26px; font-weight: 700;
-}
-.sauce-chip {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 5px 22px 5px 12px;
-  border: 3px solid;
-  border-radius: 16px;
-  font-size: 24px; font-weight: 600;
-}
-.sauce-chip img { width: 30px; height: 42px; object-fit: contain; }
-.sauce-chip.ketchup { background: #fde0dc; border-color: #f5b8b0; }
-.sauce-chip.mustard { background: #fdf1c8; border-color: #f1d98a; }
-.sauce-chip.mayo    { background: #fbf4e6; border-color: #e8d9bd; }
-.sauce-chip.none    { background: #f3e5cc; border-color: #e5d0aa; padding: 5px 26px; }
 .recipes-error { font-size: 24px; text-align: center; }
 
 @keyframes fade-in { from { opacity: 0; } }
@@ -845,9 +794,10 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 body.cream { background: #fdfaee; }
 
 /* on phones there are no green strips: the page itself is cream too */
-@media (orientation: portrait) {
-  html, body { background: var(--cream); }
-}
+html, body { background: var(--cream); }   /* the page around the game is always cream */
+
+/* no double-tap zoom on phones (taps still work right away) */
+html, body, button, .card { touch-action: manipulation; }
 
 .start-btn {
   margin-top: 50px;
@@ -911,3 +861,463 @@ body.cream { background: #fdfaee; }
 .packets, .tray, .sauces, .done-btn, .floor-line, .floor { margin-top: var(--bot, 0px); }
 .stage.phone .book-panel { width: 800px; padding: 28px 18px 26px; }
 .stage.phone .recipe { padding-left: 20px; padding-right: 20px; }
+
+
+/* =====================================================================
+   PHONE LAYOUT
+   =====================================================================
+   Used on phone-sized portrait screens (fit() in setup.js adds the
+   "mobile" class to the stage). The stage is 822px wide (wider on short
+   screens), so things are placed from the left / right edges or in %.
+   Everything above stays the tablet / computer layout. */
+
+.stage.mobile { background: var(--cream); }
+.stage.mobile .shop { left: 0; width: 100%; }
+
+/* tablet-only pieces */
+.stage.mobile .logo,
+.stage.mobile .customer-stand,
+.stage.mobile .floor-line,
+.stage.mobile .floor,
+.stage.mobile .order > img,
+.stage.mobile .timer > img,
+.stage.mobile .points-label,
+.stage.mobile .condiments > .label,
+.stage.mobile .sauces > .label,
+.stage.mobile .done-label-tablet { display: none; }
+
+/* no tablet spacing on phones */
+.stage.mobile .ingredients, .stage.mobile .recipes-btn, .stage.mobile .drinks, .stage.mobile .condiments,
+.stage.mobile .packets, .stage.mobile .tray, .stage.mobile .sauces, .stage.mobile .done-btn { margin-top: 0; }
+
+/* ---------- top: awning, window, timer, points ---------- */
+.stage.mobile .scene {
+  width: 100%; height: 540px;
+  background-color: #f6ead3;
+  background-position: center 100px;   /* the counter sits right under the customer */
+  background-size: max(941px, 115%) auto;
+}
+.stage.mobile .awning { left: 0; top: -128px; width: 100%; z-index: 3; }
+
+.stage.mobile .timer,
+.stage.mobile .points {
+  top: 92px; height: 88px; width: auto;
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 30px 0 18px;
+  background: #fff8ea;
+  border: 4px solid #e9d2ab;
+  border-radius: 999px;
+  box-shadow: none;
+  color: var(--brown);
+  z-index: 4;
+}
+.stage.mobile .timer { left: 28px; }
+.stage.mobile .points { left: auto; right: 28px; }
+.stage.mobile .timer-icon { display: block; width: 62px; height: 62px; }
+.stage.mobile .timer-text {
+  position: static; width: auto; height: auto;
+  color: var(--brown);
+  font-size: 56px; letter-spacing: 0;
+}
+.stage.mobile .points img { width: 62px; }
+.stage.mobile .points-value { margin-left: 0; padding: 0; background: none; font-size: 56px; }
+.stage.mobile .points-pop { left: auto; right: 70px; top: 190px; font-size: 52px; }
+
+/* the wooden counter the customer leans on (cut from the kitchen background) */
+.stage.mobile .phone-counter {
+  display: block;
+  left: 0; top: 486px;
+  width: 100%; height: 96px;
+  background: url("../photos/backgrounds/counter.png") center / 100% 100% no-repeat;
+  z-index: 1;               /* behind the customer, so their paws rest on it */
+}
+
+/* ---------- customer + order speech bubble ---------- */
+.stage.mobile .customer { left: 28%; top: 228px; height: 292px; z-index: 2; }
+.stage.mobile .heart { left: calc(28% + 70px); top: 200px; }
+.stage.mobile .talk-bubble { left: calc(28% + 60px); top: 118px; width: 290px; }
+
+.stage.mobile .order { left: auto; right: 22px; top: 226px; width: 400px; z-index: 3; }
+.stage.mobile .order-text {
+  position: relative;
+  left: 0; top: 0;
+  width: 100%; height: 300px;
+  padding: 24px 28px 18px 34px;
+  background: #fffaf0;
+  border: 5px solid var(--brown);
+  border-radius: 36px;
+}
+.stage.mobile .order-text::before {       /* the bubble's tail, pointing at the customer */
+  content: "";
+  position: absolute;
+  left: -23px; top: 118px;
+  width: 36px; height: 36px;
+  background: #fffaf0;
+  border-left: 5px solid var(--brown);
+  border-bottom: 5px solid var(--brown);
+  rotate: 45deg;
+}
+.stage.mobile .order-title {
+  text-transform: none;
+  font-size: 46px;
+  letter-spacing: 0;
+  padding-bottom: 12px;
+  margin-bottom: 10px;
+  border-bottom-width: 3px;
+}
+.stage.mobile .order-row { font-size: calc(36px * var(--fit, 1)); padding: calc(5px * var(--fit, 1)) 0; }
+.stage.mobile .order-qty { width: 62px; }
+.stage.mobile .order-chips { padding-left: 62px; }
+.stage.mobile .order-chip { font-size: calc(24px * var(--fit, 1)); padding: 2px 16px; }
+
+/* ---------- tray + serve button ---------- */
+.stage.mobile .tray { left: 70px; right: 70px; width: auto; top: 622px; height: 396px; }   /* clear gap under the counter */
+.stage.mobile .tray-food { inset: 56px 76px 74px; gap: 8px 22px; }
+.stage.mobile .tray-food > .tray-item { width: 150px; height: 150px; }
+.stage.mobile .tray-food > .packet { width: 86px; height: 86px; }
+.stage.mobile .tray-food > .dip { width: 100px; height: 86px; }
+.stage.mobile .burger { zoom: 1.25; }
+
+.stage.mobile .done-btn {
+  left: calc(50% - 210px); top: 1048px;
+  width: 420px; height: 100px;
+  font-size: 54px; letter-spacing: 0;
+}
+.stage.mobile .done-label-phone { display: inline; }
+
+/* ---------- item panel with tabs ---------- */
+.stage.mobile .item-panel {
+  position: absolute;
+  left: 0; right: 0; top: 1180px; bottom: 0;
+  display: flex; flex-direction: column;
+  padding: 24px 22px 0;
+  background: #fff8ec;
+  border-top: 4px solid #ecd9b8;
+  border-radius: 44px 44px 0 0;
+  z-index: 5;
+}
+.stage.mobile .item-tabs { display: flex; gap: 10px; padding-right: 196px; }
+.item-tab {
+  flex: 1;
+  height: 74px;
+  border: 4px solid transparent;
+  border-radius: 999px;
+  background: #f5e7cf;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 31px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.item-tab.active { background: #fde27a; border-color: var(--brown); font-weight: 700; }
+
+.stage.mobile .recipes-btn {
+  left: auto; right: 22px; top: 1204px;
+  width: 182px; height: 74px;
+  padding: 0 12px; gap: 6px;
+  border: 4px solid #ecd9b8;
+  border-radius: 22px;
+  background: #fffaf0;
+  font-size: 27px;
+  z-index: 6;
+}
+.stage.mobile .recipes-btn img { width: 50px; }
+
+/* the groups disappear and their cards become one grid */
+.stage.mobile .item-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 200px;
+  gap: 18px;
+  padding: 22px 2px 30px;
+  align-content: start;
+  overflow-y: auto;
+}
+.stage.mobile .ingredients, .stage.mobile .drinks, .stage.mobile .condiments,
+.stage.mobile .packets, .stage.mobile .sauces { display: contents; }
+
+.stage.mobile .item-grid .card {
+  width: auto; height: auto;
+  display: none;                       /* only the open tab's cards show (below) */
+  flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  background: #fbf0dd;
+  border: none;
+  border-radius: 26px;
+  box-shadow: none;
+  transform: none;
+}
+.stage.mobile .item-panel[data-tab="food"]   .card[data-tab="food"],
+.stage.mobile .item-panel[data-tab="drinks"] .card[data-tab="drinks"],
+.stage.mobile .item-panel[data-tab="sides"]  .card[data-tab="sides"],
+.stage.mobile .item-panel[data-tab="sauces"] .card[data-tab="sauces"] { display: flex; }
+.stage.mobile .item-grid .card img {
+  width: auto; height: 108px; max-width: 80%; max-height: none;
+  margin: 0;
+  object-fit: contain;
+}
+.stage.mobile .item-grid .card .label {
+  display: block;
+  position: static;
+  transform: none;
+  padding: 0;
+  background: none; border: none;
+  font-size: 30px; font-weight: 600; line-height: 1.1;
+  text-align: center;
+  white-space: normal;
+}
+
+
+/* =====================================================================
+   RECIPE BOOK (all screens)
+   =====================================================================
+   Four burgers side by side, each drawn from the bottom bun up, with the
+   sauce bottles underneath. On phones it slides up from the bottom; on
+   tablets and computers it's a card in the middle of the screen. */
+.book-panel {
+  position: relative;
+  width: min(860px, calc(100% - 40px));   /* never wider than the screen */
+  height: 94%;                             /* the columns share out this height */
+  max-height: 1500px;
+  display: flex; flex-direction: column;
+  padding: 50px 26px 30px;
+  background: #fdf8ec;
+  border: 5px solid #5e4535;
+  border-radius: 56px;
+  box-shadow: 0 0 0 7px #f6d77e;
+  overflow: hidden;
+  animation: panel-in 0.25s ease-out;
+}
+.book-panel::before {                    /* small handle at the top */
+  content: "";
+  position: absolute;
+  left: 50%; top: 18px;
+  width: 110px; height: 12px;
+  translate: -50% 0;
+  border-radius: 999px;
+  background: #d9c6a6;
+}
+.book-panel .recipes-close { top: 54px; right: 34px; width: 84px; height: 84px; font-size: 52px; }
+
+.book-header { display: flex; align-items: center; gap: 24px; padding: 0 120px 0 10px; }
+.book-header img { width: 130px; }
+.book-title { font-size: 76px; font-weight: 700; line-height: 1; color: var(--brown); }
+.book-sub { font-size: 28px; font-weight: 600; margin-top: 4px; }
+
+/* the four recipes side by side, with thin lines between them */
+.recipes-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  margin-top: 26px;
+}
+.recipe {
+  flex: 1;
+  min-width: 0;
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 0;
+  padding: 0 5px;
+  border-left: 3px solid #eedfc5;
+}
+.recipe:first-child { border-left: none; }
+.recipe-name {
+  height: 96px;
+  display: flex; align-items: center;
+  text-align: center;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+/* the burger, drawn from the bottom bun (bottom) up to the top bun (top) */
+.recipe-stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  min-height: 0;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #eedfc5;
+}
+/* every ingredient gets an equal share of the column's height, so a tall
+   burger (Big Mac) shrinks to fit instead of running off the bottom */
+.recipe-step { flex: 1 1 0; min-height: 0; width: 100%; display: flex; justify-content: center; }
+.recipe-bubble { height: 100%; display: flex; align-items: center; justify-content: center; }
+.recipe-bubble img { width: 150px; max-width: 100%; height: 100%; max-height: 74px; object-fit: contain; }
+.recipe-arrow { flex: none; }
+.recipe-arrow {                          /* small up-arrow between layers */
+  width: 0; height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-bottom: 15px solid #e6cfa8;
+}
+
+/* sauces under each burger: just the bottles. A fixed height, so the line
+   above the sauces sits at the same height in every column. */
+.recipe-sauces {
+  flex: none;
+  height: 220px;
+  overflow: hidden;
+  display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+}
+.sauce-label { flex-basis: 100%; text-align: center; font-size: 28px; font-weight: 700; }
+.sauce-chip img { width: 62px; height: 120px; object-fit: contain; }
+.sauce-chip.none {
+  padding: 12px 26px;
+  background: #f6ead5;
+  border: 3px solid #eedfc5;
+  border-radius: 20px;
+  font-size: 26px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.recipes-back {
+  width: 100%; height: 104px;
+  margin-top: 22px;
+  flex: none;
+  border: 5px solid var(--dark-red);
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff;
+  font-family: inherit;
+  font-size: 50px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* phones: a sheet that slides up from the bottom, full width */
+.stage.mobile .recipes-overlay { align-items: flex-end; }
+.stage.mobile .book-panel {
+  width: 100%;
+  height: 92%;
+  border: none;
+  border-radius: 56px 56px 0 0;
+  box-shadow: 0 -8px 0 rgba(0, 0, 0, 0.06);
+  animation: sheet-up 0.3s ease-out;
+}
+@keyframes sheet-up { from { transform: translateY(100%); } }
+
+/* ---------- recipe book: ingredients pop in, bottom bun first ---------- */
+.recipe-step.pop-in { animation: recipe-pop 0.32s ease-out backwards; }
+@keyframes recipe-pop {
+  0%   { opacity: 0; scale: 0.3; }
+  70%  { opacity: 1; scale: 1.15; }
+  100% { scale: 1; }
+}
+
+
+/* =====================================================================
+   WIDE LAYOUT
+   =====================================================================
+   Used on computers and tablets held sideways (fit() in setup.js adds the
+   "wide" class). The stage is 1448 x 1086 and the same pieces are moved
+   around: counter across the top, ingredients left, tray in the middle,
+   drinks / condiments / dips on the right. */
+
+.stage.wide { background: var(--cream); }
+.stage.wide .shop { left: 0; width: 100%; }
+
+/* no tall-layout spacing here */
+.stage.wide .ingredients, .stage.wide .recipes-btn, .stage.wide .drinks, .stage.wide .condiments,
+.stage.wide .packets, .stage.wide .tray, .stage.wide .sauces, .stage.wide .done-btn { margin-top: 0; }
+.stage.wide .floor-line, .stage.wide .floor { display: none; }
+
+/* ---------- top: awning, window, counter ---------- */
+.stage.wide .scene {
+  width: 100%; height: 400px;
+  background-size: 1448px auto;
+  background-position: center -300px;
+}
+.stage.wide .awning {
+  left: 0; top: -10px;
+  width: 100%; height: 118px;
+  object-fit: cover; object-position: center bottom;
+  z-index: 3;
+}
+.stage.wide .phone-counter {      /* the wooden counter strip the customer leans on */
+  display: block;
+  left: 0; top: 338px;
+  width: 100%; height: 62px;
+  background: url("../photos/backgrounds/counter.png") center / 100% 100% no-repeat;
+  z-index: 1;
+}
+
+.stage.wide .logo { left: 58px; top: 132px; width: 290px; z-index: 2; }
+.stage.wide .timer { left: 42px; top: 220px; scale: 1.12; transform-origin: top left; z-index: 2; }
+.stage.wide .points { left: 285px; top: 276px; width: 285px; height: 66px; font-size: 21px; z-index: 2; }
+.stage.wide .points-pop { left: 470px; top: 262px; }
+
+.stage.wide .customer { left: 718px; top: 132px; height: 218px; z-index: 2; }
+.stage.wide .customer-stand { left: 636px; top: 346px; width: 178px; height: 42px; z-index: 2; }
+.stage.wide .heart { left: 790px; top: 118px; }
+.stage.wide .talk-bubble { left: 790px; top: 30px; width: 290px; }
+
+.stage.wide .order {
+  left: 935px; top: 112px;
+  scale: 1.27; transform-origin: top left;
+  z-index: 2;
+}
+
+/* ---------- left: ingredients ---------- */
+.stage.wide .ingredients { left: 25px; top: 432px; width: 515px; height: 555px; padding-top: 66px; column-gap: 42px; row-gap: 34px; }
+.stage.wide .recipes-btn { left: 326px; top: 410px; }
+
+/* ---------- middle: tray, packets, DONE ---------- */
+.stage.wide .tray { left: 552px; top: 446px; width: 505px; height: 382px; }
+.stage.wide .packets {
+  left: 610px; top: 846px;
+  flex-direction: row; gap: 38px;
+}
+.stage.wide .done-btn {
+  left: 662px; top: 962px;
+  width: 245px; height: 70px;
+  font-size: 40px;
+}
+
+/* ---------- right: drinks, condiments, dips ---------- */
+.stage.wide .drinks { left: 1090px; top: 432px; column-gap: 22px; row-gap: 26px; }
+.stage.wide .drinks .card { width: 150px; height: 136px; }
+.stage.wide .condiments { left: 1084px; top: 760px; width: 328px; height: 126px; }
+.stage.wide .sauces {
+  left: 1084px; top: 908px;
+  width: 328px; height: 124px;
+  flex-direction: row; justify-content: center; align-items: center; gap: 10px;
+  padding: 0 0 12px;
+  background: none; border: none;
+}
+.stage.wide .sauces .card { width: 100px; height: 100px; }
+
+/* ---------- screens shown over the game: fit the shorter stage ---------- */
+.stage.wide .start-friends { margin-top: 30px; }
+.stage.wide .start-btn { margin-top: 26px; }
+.stage.wide .end-card,
+.stage.wide .apply-card { zoom: 0.8; }
+.stage.wide .book-panel { width: 900px; height: 96%; }
+
+
+/* When the top of the stage is above the screen (tall layout on a short
+   screen, see fit() in setup.js), screens shown over the game start at the
+   visible top instead. */
+.recipes-overlay, .loading-screen, .start-screen, .end-screen { top: var(--crop, 0px); }
+.tut-skip-top { top: calc(18px + var(--crop, 0px)); }
+
+/* wide layout: a shorter screen, so the parts around the burgers are tighter */
+.stage.wide .book-panel { padding-top: 40px; padding-bottom: 24px; }
+.stage.wide .book-panel .recipes-close { top: 40px; width: 72px; height: 72px; font-size: 44px; }
+.stage.wide .book-header img { width: 104px; }
+.stage.wide .book-title { font-size: 62px; }
+.stage.wide .recipes-list { margin-top: 14px; }
+.stage.wide .recipe-name { height: 70px; font-size: 25px; margin-bottom: 4px; }
+.stage.wide .recipe-stack { gap: 0; padding-bottom: 12px; }
+.stage.wide .recipe-arrow { border-bottom-width: 11px; border-left-width: 8px; border-right-width: 8px; }
+.stage.wide .recipe-sauces { height: 150px; margin-top: 10px; gap: 6px; }
+.stage.wide .sauce-label { font-size: 24px; }
+.stage.wide .sauce-chip img { width: 46px; height: 92px; }
+.stage.wide .recipes-back { height: 80px; margin-top: 14px; font-size: 40px; }

@@ -25,6 +25,8 @@ const SAUCE_PENALTY = 10;         // wrong sauce packets
 
 // Layout (see "phone screens" in style.css)
 const W = 941, H = 1672, SHOP_W = 822;
+// Landscape layout for computers and tablets held sideways (see "WIDE LAYOUT" in style.css)
+const WIDE_W = 1448, WIDE_H = 1086;
 
 // Tray
 const TRAY_MAX = 3;     // burgers, food, drinks and desserts
@@ -53,6 +55,12 @@ const SEND_MS = 600;      // tray flying to the customer
 const REACTION_MS = 1100; // customer showing their happy / angry face
 const LEAVE_MS = 600;     // walking out (matches .customer.leave in the CSS)
 
+// Phone layout with tabs (see "PHONE LAYOUT" in style.css). Switched off:
+// phones use the tall layout, like tablets held upright. Set to true to use it again.
+const USE_TAB_LAYOUT = false;
+const MOBILE_MAX_WIDTH = 600; // portrait screens narrower than this get the phone layout
+const MOBILE_MIN_H = 1780;    // shortest the phone layout gets before it shrinks to fit
+
 // Tutorial
 const TUTORIAL_KEY = "mac-game-tutorial-seen";
 const TUTORIAL_STEPS = [
@@ -65,6 +73,18 @@ const TUTORIAL_STEPS = [
   { target: ".packets", text: "Sometimes a customer asks for sauce packets in a speech bubble. Add them here." },
   { target: ".tray", text: "Everything you tap lands on the tray. Tap something on the tray to take it off." },
   { target: ".done-btn", text: "Tap DONE to serve. A right order gets 100 points!" },
+  { target: ".timer", text: "You have 2 minutes. Serve as many orders as you can!" },
+];
+
+// Tutorial steps for the phone layout (the item groups are tabs there)
+const TUTORIAL_STEPS_MOBILE = [
+  { target: ".order", text: "This is the order. Each customer tells you what they want here." },
+  { target: ".item-tabs", text: "Pick items here. Switch between Food, Drinks, Sides and Sauces with the tabs." },
+  { target: ".item-grid", text: "To make a burger: tap the bun, add the ingredients, then tap the bun again to put the top on." },
+  { target: ".item-tabs", text: "In Sauces: bottles go on the burger, dips go with nuggets, and packets are for customers who ask for them." },
+  { target: ".recipes-btn", text: "Not sure what goes in a burger? Open the recipe book." },
+  { target: ".tray", text: "Everything you tap lands on the tray. Tap something on the tray to take it off." },
+  { target: ".done-btn", text: "Tap Serve order when it's ready. A right order gets 100 points!" },
   { target: ".timer", text: "You have 2 minutes. Serve as many orders as you can!" },
 ];
 
@@ -104,6 +124,9 @@ const gameOverlay = document.getElementById("game-overlay");
 const gameTitle = document.getElementById("game-title");
 const gameMessage = document.getElementById("game-message");
 const gameButtons = document.getElementById("game-buttons");
+
+// item panel (tabs on phones)
+const itemPanel = document.getElementById("item-panel");
 
 // start screen
 const startScreen = document.getElementById("start-screen");
@@ -205,11 +228,13 @@ function idsOf(elements) {
 // the sides). On a tall phone screen we drop the green strips and make the
 // stage taller so it fills the whole screen; the extra height is shared out
 // between the gaps (see "phone screens" in style.css).
-// On a computer (a wide screen) the whole 941 x 1672 layout is shown, with the
-// green strips, scaled to fit.
+// On a phone (narrow portrait screen) the separate phone layout is used and
+// fills the screen (see "PHONE LAYOUT" in style.css).
 //
-// On a phone (any portrait screen) the shop always fills the screen edge to
-// edge: it's scaled to the full width, and then the height is adjusted:
+// On a computer or a tablet held sideways (a wide screen) the wide 1448 x 1086
+// layout is used, scaled to fit (see "WIDE LAYOUT" in style.css).
+//
+// On a tablet held upright the shop always fills the screen edge to edge: it's scaled to the full width, and then the height is adjusted:
 //   - taller screen: the extra height is shared out between the gaps
 //   - shorter screen (e.g. with the browser's toolbars showing), in this order:
 //       1. the gaps above the panels and above the tray get smaller
@@ -223,13 +248,29 @@ const TOP_CROP_MAX = 140;   // step 3: how much of the awning can go off screen
 
 function fit() {
   const vw = window.innerWidth, vh = window.innerHeight;
-  const phone = vh > vw;
+  const mobile = USE_TAB_LAYOUT && vh > vw && vw < MOBILE_MAX_WIDTH; // phone: tab layout (off)
+  const phone = vh > vw && !mobile;                 // phone / tablet held upright: tall layout, full width
+  const wide = vw >= vh;                            // computer / tablet sideways: wide layout
+  stage.classList.toggle("mobile", mobile);
   stage.classList.toggle("phone", phone);
+  stage.classList.toggle("wide", wide);
 
   let stageW = W, stageH = H, s, mid = 0, bot = 0, rest = 0, cropTop = 0;
 
-  if (!phone) {
-    s = Math.min(vw / W, vh / H);
+  if (mobile) {
+    // full width, full height; on short screens the stage gets wider instead
+    // (the phone layout is placed from the edges, so it just spreads out)
+    stageW = SHOP_W;
+    s = vw / SHOP_W;
+    stageH = vh / s;
+    if (stageH < MOBILE_MIN_H) {
+      stageH = MOBILE_MIN_H;
+      s = vh / MOBILE_MIN_H;
+      stageW = vw / s;
+    }
+  } else if (wide) {
+    stageW = WIDE_W; stageH = WIDE_H;
+    s = Math.min(vw / WIDE_W, vh / WIDE_H);
   } else {
     stageW = SHOP_W;
     s = vw / SHOP_W;
@@ -257,6 +298,7 @@ function fit() {
   stage.style.setProperty("--mid", Math.round(mid) + "px");
   stage.style.setProperty("--bot", Math.round(bot) + "px");
   stage.style.setProperty("--rest", Math.round(rest) + "px");
+  stage.style.setProperty("--crop", Math.round(cropTop) + "px"); // part of the stage above the screen
 
   viewport.style.width = stageW * s + "px";
   viewport.style.height = (stageH - cropTop) * s + "px";
