@@ -205,24 +205,63 @@ function idsOf(elements) {
 // the sides). On a tall phone screen we drop the green strips and make the
 // stage taller so it fills the whole screen; the extra height is shared out
 // between the gaps (see "phone screens" in style.css).
+// On a computer (a wide screen) the whole 941 x 1672 layout is shown, with the
+// green strips, scaled to fit.
+//
+// On a phone (any portrait screen) the shop always fills the screen edge to
+// edge: it's scaled to the full width, and then the height is adjusted:
+//   - taller screen: the extra height is shared out between the gaps
+//   - shorter screen (e.g. with the browser's toolbars showing), in this order:
+//       1. the gaps above the panels and above the tray get smaller
+//       2. the empty floor under DONE is trimmed
+//       3. the top of the awning goes past the top of the screen
+//     (only if the screen is shorter than even that, it falls back to
+//      fitting the height, with a little cream at the sides)
+const GAP_SHRINK_MAX = 70;  // step 1: how far the tray area can move up
+const FLOOR_TRIM_MAX = 90;  // step 2: how much of the floor can be cut
+const TOP_CROP_MAX = 140;   // step 3: how much of the awning can go off screen
+
 function fit() {
   const vw = window.innerWidth, vh = window.innerHeight;
-  const phone = vw / vh < W / H; // screen is taller than the layout
-  const stageW = phone ? SHOP_W : W;
-  const stageH = phone ? Math.max(H, Math.round(SHOP_W * vh / vw)) : H;
-  const s = Math.min(vw / stageW, vh / stageH);
-
-  const extra = stageH - H;
+  const phone = vh > vw;
   stage.classList.toggle("phone", phone);
+
+  let stageW = W, stageH = H, s, mid = 0, bot = 0, rest = 0, cropTop = 0;
+
+  if (!phone) {
+    s = Math.min(vw / W, vh / H);
+  } else {
+    stageW = SHOP_W;
+    s = vw / SHOP_W;
+    const visibleH = vh / s;            // how much layout height fits on screen
+    if (visibleH >= H) {
+      const extra = visibleH - H;
+      mid = extra * 0.3; bot = extra * 0.7; rest = extra * 0.3;
+      stageH = visibleH;
+    } else {
+      let missing = H - visibleH;
+      const shrink = Math.min(missing, GAP_SHRINK_MAX);
+      mid = -shrink * 0.3; bot = -shrink;
+      missing -= shrink;
+      const trim = Math.min(missing, FLOOR_TRIM_MAX);
+      missing -= trim;
+      stageH = H - shrink - trim;
+      cropTop = Math.min(missing, TOP_CROP_MAX);
+      missing -= cropTop;
+      if (missing > 0) s = vh / (stageH - cropTop); // very short screen: fit the height
+    }
+  }
+
   stage.style.width = stageW + "px";
-  stage.style.height = stageH + "px";
-  stage.style.setProperty("--mid", Math.round(extra * 0.3) + "px");
-  stage.style.setProperty("--bot", Math.round(extra * 0.7) + "px");
-  stage.style.setProperty("--rest", Math.round(extra * 0.3) + "px");
+  stage.style.height = Math.round(stageH) + "px";
+  stage.style.setProperty("--mid", Math.round(mid) + "px");
+  stage.style.setProperty("--bot", Math.round(bot) + "px");
+  stage.style.setProperty("--rest", Math.round(rest) + "px");
 
   viewport.style.width = stageW * s + "px";
-  viewport.style.height = stageH * s + "px";
-  stage.style.transform = "scale(" + s + ")";
+  viewport.style.height = (stageH - cropTop) * s + "px";
+  // move the stage up by cropTop (in screen pixels), then scale it
+  stage.style.transform = "translateY(" + (-cropTop * s) + "px) scale(" + s + ")";
 }
 
 // =====================================================================

@@ -23,7 +23,7 @@ body { display: flex; align-items: center; justify-content: center; }
 
 /* The screen is laid out at the mockup's size (941 x 1672) and scaled
    to fit the window by fit() in setup.js. */
-.viewport { position: relative; }
+.viewport { position: relative; overflow: hidden; }
 .stage {
   position: absolute;
   top: 0; left: 0;
@@ -843,6 +843,11 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 
 /* while the loading / start screen is up, the page around the game is cream too */
 body.cream { background: #fdfaee; }
+
+/* on phones there are no green strips: the page itself is cream too */
+@media (orientation: portrait) {
+  html, body { background: var(--cream); }
+}
 
 .start-btn {
   margin-top: 50px;
