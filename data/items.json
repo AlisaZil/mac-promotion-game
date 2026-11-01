@@ -1,0 +1,34 @@
+{
+  "ingredients": [
+    { "id": "burger-bun", "name": "Burger Bun", "image": "photos/ingredients/burger-bun.png" },
+    { "id": "beef-patty", "name": "Beef Patty", "image": "photos/ingredients/beef-patty.png" },
+    { "id": "cheese", "name": "Cheese", "image": "photos/ingredients/cheese.png" },
+    { "id": "lettuce", "name": "Lettuce", "image": "photos/ingredients/lettuce.png" },
+    { "id": "pickles", "name": "Pickles", "image": "photos/ingredients/pickles.png" },
+    { "id": "tomato", "name": "Tomato", "image": "photos/ingredients/tomato.png" }
+  ],
+  "food": [
+    { "id": "nuggets", "name": "Nuggets", "image": "photos/food/nuggets.png" },
+    { "id": "fries", "name": "Fries", "image": "photos/food/fries.png" },
+    { "id": "chicken-cutlet", "name": "Chicken Cutlet", "image": "photos/food/hash-brown.png" }
+  ],
+  "drinks": [
+    { "id": "soda", "name": "Soda", "image": "photos/drinks-desserts/soda.png" },
+    { "id": "coffee", "name": "Coffee", "image": "photos/drinks-desserts/coffee.png" }
+  ],
+  "desserts": [
+    { "id": "ice-cream-cone", "name": "Ice Cream Cone", "image": "photos/drinks-desserts/ice-cream-cone.png" },
+    { "id": "mcflurry", "name": "McFlurry", "image": "photos/drinks-desserts/mcflurry.png" }
+  ],
+  "sauces": [
+    { "id": "ketchup-bottle", "name": "Ketchup", "type": "bottle", "image": "photos/sauces/ketchup-bottle.png" },
+    { "id": "mustard-bottle", "name": "Mustard", "type": "bottle", "image": "photos/sauces/mustard-bottle.png" },
+    { "id": "mayo-bottle", "name": "Mayo", "type": "bottle", "image": "photos/sauces/mayo-bottle.png" },
+    { "id": "ketchup-packet", "name": "Ketchup Packet", "type": "packet", "image": "photos/sauces/ketchup-packet.png" },
+    { "id": "mustard-packet", "name": "Mustard Packet", "type": "packet", "image": "photos/sauces/mustard-packet.png" },
+    { "id": "mayo-packet", "name": "Mayo Packet", "type": "packet", "image": "photos/sauces/mayo-packet.png" },
+    { "id": "bbq-dip", "name": "BBQ Dip", "type": "dip", "image": "photos/sauces/bbq-dip.png" },
+    { "id": "sweet-chili-dip", "name": "Sweet Chili Dip", "type": "dip", "image": "photos/sauces/sweet-chili-dip.png" },
+    { "id": "sweet-sour-dip", "name": "Sweet 'n Sour Dip", "type": "dip", "image": "photos/sauces/sweet-sour-dip.png" }
+  ]
+}

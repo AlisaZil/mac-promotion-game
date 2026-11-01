@@ -1,0 +1,12 @@
+{
+  "customers": [
+    { "id": "cat-calico", "name": "Calico Cat", "image": "photos/customers/cat-calico.png", "happy": "photos/customers/cat-calico-happy.png", "angry": "photos/customers/cat-calico-angry.png" },
+    { "id": "cat-orange", "name": "Orange Cat", "image": "photos/customers/cat-orange.png", "happy": "photos/customers/cat-orange-happy.png", "angry": "photos/customers/cat-orange-angry.png" },
+    { "id": "koala", "name": "Koala", "image": "photos/customers/koala.png", "happy": "photos/customers/koala-happy.png", "angry": "photos/customers/koala-angry.png" },
+    { "id": "dog-beige", "name": "Beige Dog", "image": "photos/customers/dog-beige.png", "happy": "photos/customers/dog-beige-happy.png", "angry": "photos/customers/dog-beige-angry.png" },
+    { "id": "dino", "name": "Dino", "image": "photos/customers/dino.png", "happy": "photos/customers/dino-happy.png", "angry": "photos/customers/dino-angry.png" },
+    { "id": "dog-spotted", "name": "Spotted Dog", "image": "photos/customers/dog-spotted.png", "happy": "photos/customers/dog-spotted-happy.png", "angry": "photos/customers/dog-spotted-angry.png" },
+    { "id": "bunny", "name": "Bunny", "image": "photos/customers/bunny.png", "happy": "photos/customers/bunny-happy.png", "angry": "photos/customers/bunny-angry.png" },
+    { "id": "bear", "name": "Bear", "image": "photos/customers/bear.png", "happy": "photos/customers/bear-happy.png", "angry": "photos/customers/bear-angry.png" }
+  ]
+}

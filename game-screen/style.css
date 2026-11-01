@@ -1,0 +1,825 @@
+:root {
+  --green: #b9d9b1;
+  --cream: #fbf3e1;
+  --card: #f3e0c2;
+  --red: #df3a3f;
+  --dark-red: #b81f26;
+  --brown: #3b2418;
+  --panel: #a88c75;
+  --white: #fffaf0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--green);
+  overflow: hidden;
+  font-family: "Fredoka", system-ui, sans-serif;
+  color: var(--brown);
+}
+
+body { display: flex; align-items: center; justify-content: center; }
+
+/* The screen is laid out at the mockup's size (941 x 1672) and scaled
+   to fit the window by script.js. */
+.viewport { position: relative; }
+.stage {
+  position: absolute;
+  top: 0; left: 0;
+  width: 941px;
+  height: 1672px;
+  transform-origin: top left;
+  background: var(--green);
+  overflow: hidden;
+}
+
+.abs { position: absolute; }
+img { display: block; user-select: none; -webkit-user-drag: none; }
+
+/* ---------- shop frame ---------- */
+.shop {
+  left: 60px; top: 0;
+  width: 822px; height: 100%;     /* the stage gets taller on phones, see script.js */
+  background: var(--cream);
+  overflow: hidden;
+}
+
+.scene {
+  left: 0; top: 0;
+  width: 822px; height: 520px;
+  background: url("../photos/backgrounds/kitchen.png") center top / 941px auto no-repeat;
+  border-bottom: 3px solid #ecd9b8;
+}
+
+.awning { left: 0; top: -6px; width: 822px; }
+
+.logo { left: 20px; top: 220px; width: 212px; }
+
+/* ---------- timer ---------- */
+.timer { left: 26px; top: 298px; width: 195px; }
+.timer img { width: 100%; }
+.timer-text {
+  position: absolute;
+  left: 34px; top: 48px;
+  width: 125px; height: 46px;
+  display: grid; place-items: center;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ---------- points ---------- */
+.points {
+  left: 28px; top: 458px;
+  width: 258px; height: 58px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 8px 0 12px;
+  background: var(--red);
+  border: 3px solid var(--dark-red);
+  border-radius: 16px;
+  box-shadow: 0 0 0 3px #f6d9c4;
+  color: #fff;
+  font-weight: 600;
+  font-size: 19px;
+}
+.points img { width: 34px; }
+.points-value {
+  margin-left: auto;
+  background: var(--white);
+  color: var(--brown);
+  border-radius: 12px;
+  padding: 2px 18px;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+/* ---------- customer ---------- */
+.customer { left: 340px; top: 225px; height: 188px; width: auto; translate: -50% 0; }
+.customer-stand {
+  left: 282px; top: 410px;
+  width: 146px; height: 52px;
+  background: #f2dfc0;
+  border: 3px solid #d9bd94;
+  border-radius: 4px;
+}
+
+/* ---------- order board ---------- */
+.order { left: 455px; top: 260px; width: 296px; }
+.order > img { width: 100%; }
+/* fills the paper area of the board */
+.order-text {
+  position: absolute;
+  left: 22px; top: 42px;
+  width: 250px; height: 188px;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  padding: 14px 14px 12px 25px;  /* title always sits at the top of the paper */
+}
+/* small header so the items get the attention */
+.order-title {
+  color: var(--dark-red);
+  font-size: 22px;                /* fixed size: only the items shrink to fit */
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  line-height: 1.1;
+  padding-bottom: 9px;
+  margin-bottom: 7px;
+  border-bottom: 2px solid #ecd9b8; /* line between the title and the items */
+}
+
+/* one row per item: "1×  McChicken" (long names wrap under the name) */
+.order-row {
+  display: flex; align-items: baseline;
+  font-size: calc(22px * var(--fit, 1));
+  font-weight: 600;
+  line-height: 1.12;
+  padding: calc(3px * var(--fit, 1)) 0;
+}
+.order-qty { color: var(--dark-red); font-weight: 700; flex: none; width: 37px; }
+
+/* dips as small chips right under Nuggets */
+.order-chips {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  padding: 0 0 calc(5px * var(--fit, 1)) 37px;  /* lines up with the item names */
+}
+.order-chip {
+  font-size: calc(15px * var(--fit, 1));
+  font-weight: 700;
+  line-height: 1.3;
+  padding: 1px 9px;
+  border: 2px solid;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.order-chip.bbq-dip         { background: #fde0dc; border-color: #e0675c; color: #8a2a20; }
+.order-chip.sweet-chili-dip { background: #ffe6cc; border-color: #f08a3a; color: #8a4210; }
+.order-chip.sweet-sour-dip  { background: #dff3d6; border-color: #4fa24a; color: #2d6a28; }
+
+/* ---------- item cards ---------- */
+.card {
+  position: relative;
+  width: 125px; height: 122px;
+  background: var(--card);
+  border: 4px solid var(--red);
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 4px #fbeedd, 0 0 0 4px #fff4e4;
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+.card img { max-width: 72%; max-height: 72%; margin-top: -10px; }
+.label {
+  position: absolute;
+  left: 50%; bottom: -18px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--white);
+  border: 2.5px solid var(--brown);
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.ingredients {
+  left: 15px; top: 563px;
+  width: 497px; height: 527px;
+  padding: 59px 24px 20px;      /* room for the Recipes tab at the top */
+  background: var(--panel);
+  border: 4px solid #5e4535;
+  border-radius: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 125px);
+  grid-auto-rows: 122px;
+  column-gap: 35px;
+  row-gap: 28px;
+}
+
+.drinks {
+  left: 523px; top: 568px;
+  display: grid;
+  grid-template-columns: repeat(2, 134px);
+  grid-auto-rows: 138px;
+  column-gap: 14px;
+  row-gap: 36px;
+}
+.drinks .card { width: 134px; height: 138px; }
+
+/* ---------- condiment tray ---------- */
+.condiments {
+  left: 527px; top: 932px;
+  width: 278px; height: 138px;
+  background: #f2dfc0;
+  border: 3px solid #b99a7c;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 6px #fbeedd;
+  display: flex; justify-content: center; align-items: center; gap: 16px;
+  padding-bottom: 14px;
+  cursor: pointer;
+}
+.condiments img { height: 104px; cursor: pointer; }
+
+/* ---------- packets ---------- */
+.packets {
+  left: 18px; top: 1145px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.packets img { width: 94px; cursor: pointer; }
+.packets img:nth-child(1) { transform: rotate(4deg); }
+.packets img:nth-child(2) { transform: rotate(-4deg); }
+.packets img:nth-child(3) { transform: rotate(5deg); }
+
+
+/* ---------- tray ---------- */
+.tray { left: 140px; top: 1158px; width: 524px; height: 336px; }
+.tray > img { width: 100%; height: 100%; }
+/* items placed on the tray: up to 3 main items in one row (all the same
+   size as a burger), sauce packets in a smaller row underneath */
+.tray-food {
+  position: absolute;
+  inset: 34px 40px 50px;
+  display: flex; flex-wrap: wrap;
+  align-content: center; align-items: flex-end; justify-content: center;
+  gap: 4px 14px;
+}
+.tray-food::after { content: ""; flex-basis: 100%; order: 1; } /* row break before packets */
+.tray-food > img {
+  object-fit: contain;
+  cursor: pointer;
+  animation: drop 0.25s ease-out;
+}
+.tray-food > .tray-item { width: 120px; height: 120px; }
+.tray-food > .packet { width: 54px; height: 54px; order: 2; }
+.tray-food > .dip { width: 64px; height: 56px; order: 2; }
+
+/* burger being built: each layer sits on the one below it
+   (its height from the bottom is set in the script) */
+.burger {
+  position: relative;
+  width: 120px; height: 60px;   /* grows with the stack, see the script */
+  cursor: pointer;
+}
+.burger img {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  height: auto;                 /* keep the picture's real proportions */
+  animation: drop 0.25s ease-out;
+}
+.burger .bun-bottom { width: 110px; bottom: 0; }
+.burger .layer { width: 100px; }
+.burger .layer.sauce { width: 96px; }
+.burger .bun-top { width: 116px; }
+
+@keyframes drop {
+  from { opacity: 0; transform: translateY(-24px) scale(0.8); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- sauces ---------- */
+.sauces {
+  left: 678px; top: 1137px;
+  width: 124px; height: 358px;
+  background: var(--white);
+  border: 3px solid #b99a7c;
+  border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding-top: 10px;
+}
+.sauces .card { width: 100px; height: 100px; }
+.sauces .card img { max-width: 90%; max-height: 90%; margin: 0; }
+.sauces .label { bottom: -22px; }
+
+/* ---------- click effect ---------- */
+/* Pressed-button feel. Uses the separate `scale` property so it
+   doesn't override the rotate on the packets. */
+.press { animation: press 0.18s ease-out; }
+@keyframes press {
+  0%   { scale: 1;    filter: brightness(1); }
+  40%  { scale: 0.9;  filter: brightness(0.88); }
+  100% { scale: 1;    filter: brightness(1); }
+}
+
+/* ---------- recipes tab (top-right corner of the ingredients panel) ---------- */
+.recipes-btn {
+  left: 312px; top: 552px;
+  width: 196px; height: 64px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 0 12px;
+  border: 4px solid #5e4535;
+  border-radius: 16px;
+  background: #fbd66e;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 27px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.recipes-btn img { width: 66px; }
+.recipes-btn:active { scale: 0.95; }
+
+/* ---------- recipes page ---------- */
+.recipes-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgba(30, 15, 5, 0.6);   /* dims the game behind */
+  display: flex; align-items: center; justify-content: center;
+  animation: fade-in 0.2s ease-out;
+}
+.recipes-overlay[hidden] { display: none; }
+
+.recipes-panel {
+  position: relative;
+  width: 760px;
+  max-height: 1400px;
+  overflow-y: auto;
+  padding: 40px 44px 44px;
+  background: var(--cream);
+  border: 5px solid var(--brown);
+  border-radius: 28px;
+  box-shadow: 0 0 0 6px #fbd66e;
+  animation: panel-in 0.25s ease-out;
+}
+
+.recipes-close {
+  position: absolute;
+  top: 18px; right: 20px;
+  width: 56px; height: 56px;
+  border: 4px solid var(--brown);
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-family: inherit;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  padding-bottom: 12px;
+}
+
+.recipes-title {
+  text-align: center;
+  color: var(--dark-red);
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+/* recipe book layout */
+.book-panel {
+  width: 860px;
+  padding: 30px 30px 32px;
+  border-color: #5e4535;
+  box-shadow: 0 0 0 7px #f6d77e;
+}
+.book-panel .recipes-close { top: 26px; right: 28px; width: 64px; height: 64px; }
+
+.book-header { display: flex; align-items: center; justify-content: center; gap: 22px; }
+.book-header img { width: 168px; }
+.book-title { font-size: 80px; font-weight: 700; line-height: 1; color: var(--brown); }
+
+.recipes-hint {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 12px 0 24px;
+}
+
+.recipes-list { display: flex; flex-direction: column; gap: 14px; }
+
+.recipe {
+  padding: 16px 26px 16px;
+  background: #fffaf0;
+  border: 4px solid #ecd6ae;
+  border-radius: 24px;
+}
+.recipe-name { font-size: 40px; font-weight: 700; line-height: 1.1; margin-bottom: 12px; }
+
+/* steps, bottom bun first */
+.recipe-stack {
+  display: flex; align-items: center; gap: 7px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #f0e2c8;
+}
+.recipe-step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.recipe-bubble {
+  width: 66px; height: 66px;
+  border-radius: 50%;
+  background: #f6ead5;
+  display: grid; place-items: center;
+}
+.recipe-bubble img { width: 56px; height: 48px; object-fit: contain; }
+.recipe-arrow {               /* small triangle pointing to the next step */
+  width: 0; height: 0;
+  border-left: 9px solid #5e4535;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+/* sauces as coloured chips */
+.recipe-sauces {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 12px;
+  font-size: 26px; font-weight: 700;
+}
+.sauce-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 22px 5px 12px;
+  border: 3px solid;
+  border-radius: 16px;
+  font-size: 24px; font-weight: 600;
+}
+.sauce-chip img { width: 30px; height: 42px; object-fit: contain; }
+.sauce-chip.ketchup { background: #fde0dc; border-color: #f5b8b0; }
+.sauce-chip.mustard { background: #fdf1c8; border-color: #f1d98a; }
+.sauce-chip.mayo    { background: #fbf4e6; border-color: #e8d9bd; }
+.sauce-chip.none    { background: #f3e5cc; border-color: #e5d0aa; padding: 5px 26px; }
+.recipes-error { font-size: 24px; text-align: center; }
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes panel-in { from { opacity: 0; transform: scale(0.92); } }
+
+/* ---------- done button ---------- */
+.done-btn {
+  left: 317px; top: 1508px;
+  width: 170px; height: 62px;
+  border: 4px solid var(--brown);
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff;
+  font-family: inherit;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  z-index: 1;
+}
+.done-btn:active { scale: 0.95; }
+
+/* ---------- order feedback ---------- */
+/* "+100" that floats up from the points box after a correct order */
+.points-pop {
+  left: 200px; top: 452px;
+  color: var(--dark-red);
+  font-size: 40px;
+  font-weight: 700;
+  -webkit-text-stroke: 1.5px #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+.points-pop.show { animation: points-pop 0.9s ease-out; }
+.points-pop.wrong { color: #7a6a5e; }
+@keyframes points-pop {
+  0%   { opacity: 0; translate: 0 10px; }
+  20%  { opacity: 1; }
+  100% { opacity: 0; translate: 0 -60px; }
+}
+
+/* wrong order: the board and tray shake */
+.shake { animation: shake 0.4s ease-in-out; }
+@keyframes shake {
+  0%, 100% { translate: 0 0; }
+  20% { translate: -12px 0; }
+  40% { translate: 12px 0; }
+  60% { translate: -8px 0; }
+  80% { translate: 8px 0; }
+}
+
+/* customer reactions after DONE: happy customers stay still (they send a heart),
+   angry ones shake */
+.customer.angry { animation: angry-shake 0.45s ease-in-out; }
+@keyframes angry-shake {
+  0%, 100% { translate: -50% 0; }
+  20% { translate: calc(-50% - 10px) 0; }
+  40% { translate: calc(-50% + 10px) 0; }
+  60% { translate: calc(-50% - 7px) 0; }
+  80% { translate: calc(-50% + 7px) 0; }
+}
+
+/* heart the customer sends after a correct order: pops out, then floats up */
+.heart {
+  left: 400px; top: 220px;
+  width: 74px;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+}
+.heart.show { animation: send-heart 1.1s ease-out; }
+@keyframes send-heart {
+  0%   { opacity: 0; scale: 0.3; translate: 0 20px; }
+  20%  { opacity: 1; scale: 1.25; translate: 0 0; }
+  35%  { scale: 1; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; scale: 0.9; translate: 34px -110px; }
+}
+
+/* talk bubble with the sauce packets the customer wants */
+.talk-bubble { left: 392px; top: 116px; width: 300px; z-index: 3; }
+.talk-bubble[hidden] { display: none; }
+.talk-bubble > img { width: 100%; }
+.talk-bubble.show { animation: bubble-pop 0.35s ease-out; transform-origin: 10% 100%; }
+@keyframes bubble-pop {
+  0%   { opacity: 0; scale: 0.3; }
+  70%  { scale: 1.08; }
+  100% { opacity: 1; scale: 1; }
+}
+.bubble-items {
+  position: absolute;
+  inset: 10% 8% 28% 8%;           /* the inside of the bubble, above the tail */
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-size: 30px; font-weight: 700;
+}
+.bubble-items img { height: 70px; }
+
+/* customers walk in from the right and leave to the left, with a little waddle */
+.customer.arrive { animation: walk-in 0.7s ease-out; }
+@keyframes walk-in {
+  0%   { translate: calc(-50% + 560px) 0; rotate: 0deg; }
+  25%  { rotate: -4deg; }
+  50%  { rotate: 4deg; }
+  75%  { rotate: -3deg; }
+  100% { translate: -50% 0; rotate: 0deg; }
+}
+.customer.leave { animation: walk-out 0.6s ease-in forwards; }
+@keyframes walk-out {
+  0%   { translate: -50% 0; rotate: 0deg; }
+  25%  { rotate: 4deg; }
+  50%  { rotate: -4deg; }
+  75%  { rotate: 3deg; }
+  100% { translate: calc(-50% - 540px) 0; rotate: 0deg; }
+}
+
+/* the logo, timer and points stay in front of a customer walking past */
+.logo, .timer, .points { z-index: 1; }
+
+/* last 10 seconds */
+.timer-text.hurry { animation: hurry 0.5s ease-in-out infinite alternate; }
+@keyframes hurry { to { scale: 1.12; } }
+
+/* ---------- start / time's up panel ---------- */
+.game-panel { width: 640px; text-align: center; }
+.game-message { font-size: 32px; font-weight: 600; margin: 18px 0 34px; line-height: 1.4; }
+.game-buttons { display: flex; justify-content: center; gap: 20px; }
+.game-buttons[hidden] { display: none; }
+.game-btn {
+  display: inline-grid; place-items: center;
+  min-width: 220px; height: 70px;
+  padding: 0 24px;
+  border: 4px solid var(--brown);
+  border-radius: 999px;
+  background: #fbd66e;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.game-btn.secondary { background: var(--white); }
+
+/* ---------- end screen ("Had fun?") ---------- */
+.end-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: #dc1f1f;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  animation: fade-in 0.4s ease-out;
+}
+.end-screen[hidden] { display: none; }
+
+.end-food { position: absolute; translate: -50% -50%; pointer-events: none; }
+
+.end-card {
+  position: relative;
+  width: 800px;
+  padding: 60px 50px 46px;
+  background: #fbf3e1;
+  border: 7px solid var(--brown);
+  border-radius: 70px;
+  box-shadow: inset 0 -16px 0 #f6c94a;   /* the yellow edge along the bottom */
+  text-align: center;
+  animation: panel-in 0.35s ease-out;
+}
+
+.end-icon { position: relative; display: inline-block; margin-bottom: 10px; }
+.end-icon img { width: 210px; display: block; }
+.end-ray {                                    /* little yellow "shine" lines */
+  position: absolute;
+  width: 50px; height: 12px;
+  border-radius: 999px;
+  background: #fbd03a;
+}
+.end-ray.left-top     { left: -78px;  top: 52px;  rotate: 35deg; }
+.end-ray.left-bottom  { left: -92px;  top: 112px; rotate: 0deg; }
+.end-ray.right-top    { right: -78px; top: 52px;  rotate: -35deg; }
+.end-ray.right-bottom { right: -92px; top: 112px; rotate: 0deg; }
+
+.end-score { font-size: 30px; font-weight: 600; color: #7a5a45; margin-bottom: 4px; }
+.end-title {
+  font-size: 150px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brown);
+  letter-spacing: -1px;
+}
+.end-text { font-size: 37px; font-weight: 600; line-height: 1.35; margin: 26px 0 40px; }
+
+.end-cta {
+  display: grid; place-items: center;
+  width: 640px; height: 134px;
+  margin: 0 auto;
+  border: 7px solid var(--brown);
+  border-radius: 999px;
+  background: #fcd456;
+  box-shadow: inset 0 -12px 0 #f2b42e;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 64px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.end-cta:active { scale: 0.97; }
+.end-note { font-size: 32px; font-weight: 600; margin-top: 34px; }
+
+.end-again {
+  margin-top: 22px;
+  padding: 8px 26px;
+  border: none;
+  background: none;
+  color: #7a5a45;
+  font-family: inherit;
+  font-size: 28px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---------- sign-up page ("Fancy a real shift?") ---------- */
+.apply-card { width: 740px; padding: 34px 44px 40px; }
+
+.apply-back {
+  position: absolute;
+  left: 40px; top: 36px;
+  border: none; background: none;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 32px; font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.apply-icon img { width: 130px; }
+.apply-icon .end-ray.left-top     { left: -66px;  top: 30px; }
+.apply-icon .end-ray.left-bottom  { left: -76px;  top: 72px; width: 40px; }
+.apply-icon .end-ray.right-top    { right: -66px; top: 30px; }
+.apply-icon .end-ray.right-bottom { right: -76px; top: 72px; width: 40px; }
+
+.apply-title { font-size: 76px; font-weight: 700; line-height: 1.05; color: var(--brown); letter-spacing: -1px; }
+.apply-sub { font-size: 32px; font-weight: 600; color: #5e4535; margin: 12px 0 30px; }
+
+.apply-form { display: flex; flex-direction: column; text-align: left; }
+.apply-form label { font-size: 32px; font-weight: 700; margin: 0 0 10px 2px; }
+.apply-form input,
+.apply-form select {
+  width: 100%; height: 84px;
+  margin-bottom: 26px;
+  padding: 0 26px;
+  border: 3px solid #c9b39a;
+  border-radius: 18px;
+  background: #fffaf0;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 500;
+}
+.apply-form input::placeholder { color: #9a8775; }
+.apply-form input:focus,
+.apply-form select:focus { outline: none; border-color: #f2b42e; box-shadow: 0 0 0 4px rgba(252, 212, 86, 0.5); }
+.apply-form .invalid { border-color: var(--red); }
+
+.apply-select { position: relative; }
+.apply-select select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+.apply-select select:invalid { color: #9a8775; }      /* "Choose a city" looks like a placeholder */
+.apply-select::after {                                /* the chevron */
+  content: "";
+  position: absolute;
+  right: 30px; top: 26px;
+  width: 16px; height: 16px;
+  border-right: 4px solid var(--brown);
+  border-bottom: 4px solid var(--brown);
+  rotate: 45deg;
+  pointer-events: none;
+}
+
+.apply-error { color: var(--dark-red); font-size: 26px; font-weight: 600; margin: -8px 0 16px; text-align: center; }
+.apply-error[hidden] { display: none; }
+.apply-send { width: 100%; margin-top: 6px; font-size: 56px; }
+
+.apply-thanks[hidden], #apply-form-view[hidden] { display: none; }
+.apply-thanks { padding: 30px 0 20px; }
+
+.apply-note { font-size: 26px; font-weight: 500; color: #5e4535; margin-top: 28px; }
+.apply-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--brown);
+  font-size: 28px; font-weight: 700;
+}
+
+/* ---------- tutorial ---------- */
+.tutorial { position: absolute; inset: 0; z-index: 30; }   /* also blocks clicks on the game */
+.tutorial[hidden] { display: none; }
+
+/* the highlighted area: everything around it is dimmed by the huge shadow */
+.tut-spot {
+  position: absolute;
+  border-radius: 24px;
+  box-shadow: 0 0 0 5px #fcd456, 0 0 0 4000px rgba(30, 15, 5, 0.62);
+  transition: left 0.35s ease, top 0.35s ease, width 0.35s ease, height 0.35s ease;
+  pointer-events: none;
+}
+
+/* the small popup next to the highlighted area */
+.tut-pop {
+  position: absolute;
+  width: 500px;
+  padding: 24px 30px 22px;
+  background: #fffaf0;
+  border: 5px solid var(--brown);
+  border-radius: 26px;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.18);
+  transition: left 0.35s ease, top 0.35s ease;
+}
+.tut-arrow {                       /* little pointer towards the highlighted area */
+  position: absolute;
+  width: 28px; height: 28px;
+  background: #fffaf0;
+  border-left: 5px solid var(--brown);
+  border-top: 5px solid var(--brown);
+}
+.tut-arrow.up   { top: -18px; rotate: 45deg; }
+.tut-arrow.down { bottom: -18px; rotate: 225deg; }
+.tut-step { font-size: 22px; font-weight: 700; color: #a88c75; letter-spacing: 1px; }
+.tut-text { font-size: 30px; font-weight: 600; line-height: 1.3; margin-top: 6px; }
+.tut-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; }
+.tut-next {
+  padding: 10px 36px;
+  border: 4px solid var(--brown);
+  border-radius: 999px;
+  background: #fcd456;
+  box-shadow: inset 0 -6px 0 #f2b42e;
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 30px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tut-skip-link {
+  border: none; background: none;
+  color: #7a5a45;
+  font-family: inherit;
+  font-size: 26px; font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* small skip button at the top of the screen */
+.tut-skip-top {
+  position: absolute;
+  top: 18px; right: 20px;
+  padding: 8px 20px;
+  border: 3px solid var(--brown);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.95);
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 24px; font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- sending the tray ---------- */
+/* the copy of the tray that flies to the customer (moved by script.js) */
+.flying-tray { z-index: 4; pointer-events: none; transform-origin: center; }
+/* the real tray comes back empty */
+.tray.tray-in { animation: tray-in 0.35s ease-out 0.25s backwards; }
+@keyframes tray-in { from { opacity: 0; translate: 0 40px; } }
+
+/* ---------- bottom bar ---------- */
+.floor-line { left: 0; top: 1592px; width: 822px; height: 2px; background: #e7c79a; }
+.floor { left: 0; top: 1598px; width: 822px; height: calc(74px + var(--rest, 0px)); background: #f1e5cd; }
+
+/* ---------- phone screens ----------
+   On tall phone screens the stage drops the green side strips and gets taller
+   (see fit() in script.js). The extra height is shared out by moving these
+   groups down: --mid for the item panels, --bot for the tray area, and --rest
+   makes the floor at the bottom taller. On a computer all three are 0. */
+.stage.phone .shop { left: 0; }
+.ingredients, .recipes-btn, .drinks, .condiments { margin-top: var(--mid, 0px); }
+.packets, .tray, .sauces, .done-btn, .floor-line, .floor { margin-top: var(--bot, 0px); }
+.stage.phone .book-panel { width: 800px; padding: 28px 18px 26px; }
+.stage.phone .recipe { padding-left: 20px; padding-right: 20px; }

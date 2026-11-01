@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Order Counter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="viewport" id="viewport">
+    <div class="stage" id="stage">
+      <div class="abs shop">
+
+        <!-- top: shop front -->
+        <div class="abs scene"></div>
+        <img class="abs awning" src="../photos/branding/awning.png" alt="">
+        <img class="abs logo" src="../photos/branding/logo.png" alt="McDonald's">
+
+        <div class="abs timer">
+          <img src="../photos/ui/timer.png" alt="">
+          <div class="timer-text" id="timer">02:00</div>
+        </div>
+
+        <div class="abs points">
+          <img src="../photos/ui/star.png" alt="">
+          POINTS
+          <span class="points-value" id="points">0</span>
+        </div>
+
+        <img class="abs customer" id="customer" src="../photos/customers/cat-calico.png" alt="Customer">
+        <div class="abs customer-stand"></div>
+        <img class="abs heart" id="heart" src="../photos/ui/heart.png" alt="">
+
+        <!-- talk bubble: the customer asking for sauce packets -->
+        <div class="abs talk-bubble" id="talk-bubble" hidden>
+          <img src="../photos/ui/talk-bubble.png" alt="">
+          <div class="bubble-items" id="bubble-items"></div>
+        </div>
+
+        <div class="abs order">
+          <img src="../photos/ui/order-board.png" alt="">
+          <div class="order-text">
+            <div class="order-title" id="order-title">ORDER #001</div>
+            <div id="order-lines"></div>
+          </div>
+        </div>
+
+        <!-- middle: ingredients -->
+        <div class="abs ingredients">
+          <div class="card" data-id="burger-bun"><img src="../photos/ingredients/burger-bun.png" alt=""><span class="label">bun</span></div>
+          <div class="card" data-id="beef-patty"><img src="../photos/ingredients/beef-patty.png" alt=""><span class="label">beef patty</span></div>
+          <div class="card" data-id="cheese"><img src="../photos/ingredients/cheese.png" alt=""><span class="label">cheese</span></div>
+          <div class="card" data-id="lettuce"><img src="../photos/ingredients/lettuce.png" alt=""><span class="label">lettuce</span></div>
+          <div class="card" data-id="pickles"><img src="../photos/ingredients/pickles.png" alt=""><span class="label">pickles</span></div>
+          <div class="card" data-id="tomato"><img src="../photos/ingredients/tomato.png" alt=""><span class="label">tomato</span></div>
+          <div class="card" data-id="nuggets"><img src="../photos/food/nuggets.png" alt=""><span class="label">nuggets</span></div>
+          <div class="card" data-id="fries"><img src="../photos/food/fries.png" alt=""><span class="label">fries</span></div>
+          <div class="card" data-id="chicken-cutlet"><img src="../photos/food/hash-brown.png" alt=""><span class="label">chicken cutlet</span></div>
+        </div>
+
+        <button class="abs recipes-btn" id="recipes-btn" type="button">
+          <img src="../photos/ui/recipe-book.png" alt="">
+          Recipes
+        </button>
+
+        <!-- middle: drinks & desserts -->
+        <div class="abs drinks">
+          <div class="card" data-id="coffee"><img src="../photos/drinks-desserts/coffee.png" alt=""><span class="label">coffee</span></div>
+          <div class="card" data-id="mcflurry"><img src="../photos/drinks-desserts/mcflurry.png" alt=""><span class="label">McFlurry</span></div>
+          <div class="card" data-id="ice-cream-cone"><img src="../photos/drinks-desserts/ice-cream-cone.png" alt=""><span class="label">ice cream</span></div>
+          <div class="card" data-id="soda"><img src="../photos/drinks-desserts/soda.png" alt=""><span class="label">soda</span></div>
+        </div>
+
+        <div class="abs condiments">
+          <img data-id="ketchup-bottle" src="../photos/sauces/ketchup-bottle.png" alt="Ketchup">
+          <img data-id="mustard-bottle" src="../photos/sauces/mustard-bottle.png" alt="Mustard">
+          <img data-id="mayo-bottle" src="../photos/sauces/mayo-bottle.png" alt="Mayo">
+          <span class="label">condiment</span>
+        </div>
+
+        <!-- bottom: packets, tray, dips -->
+        <div class="abs packets">
+          <img data-id="ketchup-packet" src="../photos/sauces/ketchup-packet.png" alt="Ketchup packet">
+          <img data-id="mustard-packet" src="../photos/sauces/mustard-packet.png" alt="Mustard packet">
+          <img data-id="mayo-packet" src="../photos/sauces/mayo-packet.png" alt="Mayo packet">
+        </div>
+
+        <div class="abs tray">
+          <img src="../photos/ui/tray.png" alt="">
+          <div class="tray-food" id="tray-food"></div>
+        </div>
+
+        <button class="abs done-btn" id="done-btn" type="button">DONE</button>
+        <div class="abs points-pop" id="points-pop">+100</div>
+
+        <div class="abs sauces">
+          <div class="card" data-id="bbq-dip"><img src="../photos/sauces/bbq-dip.png" alt="BBQ"></div>
+          <div class="card" data-id="sweet-chili-dip"><img src="../photos/sauces/sweet-chili-dip.png" alt="Sweet Chili"></div>
+          <div class="card" data-id="sweet-sour-dip"><img src="../photos/sauces/sweet-sour-dip.png" alt="Sweet 'n Sour"></div>
+          <span class="label">sauce</span>
+        </div>
+
+        <div class="abs floor-line"></div>
+        <div class="abs floor"></div>
+      </div>
+
+      <!-- tutorial: shown the first time, highlights one area at a time -->
+      <div class="tutorial" id="tutorial" hidden>
+        <div class="tut-spot" id="tut-spot"></div>
+        <div class="tut-pop" id="tut-pop" role="dialog" aria-live="polite">
+          <span class="tut-arrow" id="tut-arrow"></span>
+          <p class="tut-step" id="tut-step"></p>
+          <p class="tut-text" id="tut-text"></p>
+          <div class="tut-actions">
+            <button class="tut-skip-link" id="tut-skip-link" type="button">Skip</button>
+            <button class="tut-next" id="tut-next" type="button">Next</button>
+          </div>
+        </div>
+        <button class="tut-skip-top" id="tut-skip-top" type="button">Skip tutorial &rsaquo;</button>
+      </div>
+
+      <!-- end screen: shown when the time runs out -->
+      <div class="end-screen" id="end-screen" hidden>
+        <img class="end-food" src="../photos/food/fries.png" style="left:13%; top:6%; width:120px; rotate:-12deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:50%; top:5%; width:130px; rotate:6deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:86%; top:7%; width:100px; rotate:14deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:9%; top:17%; width:96px; rotate:-14deg" alt="">
+        <img class="end-food" src="../photos/food/fries.png" style="left:90%; top:18%; width:116px; rotate:12deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:4%; top:47%; width:120px; rotate:-10deg" alt="">
+        <img class="end-food" src="../photos/food/fries.png" style="left:96%; top:52%; width:110px; rotate:14deg" alt="">
+        <img class="end-food" src="../photos/food/fries.png" style="left:11%; top:86%; width:118px; rotate:-8deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:46%; top:93%; width:140px; rotate:-6deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:88%; top:87%; width:100px; rotate:12deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:82%; top:97%; width:120px; rotate:8deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:22%; top:96%; width:92px; rotate:-10deg" alt="">
+        <div class="end-card">
+          <div class="end-icon">
+            <span class="end-ray left-top"></span><span class="end-ray left-bottom"></span>
+            <img src="../photos/food/fries.png" alt="">
+            <span class="end-ray right-top"></span><span class="end-ray right-bottom"></span>
+          </div>
+          <p class="end-score" id="end-score"></p>
+          <h2 class="end-title">Had fun?</h2>
+          <p class="end-text">You just worked a shift for free.<br>Might as well get paid for the next one.</p>
+          <button class="end-cta" id="work-with-us" type="button">WORK WITH US</button>
+          <p class="end-note">Your next shift could be real.</p>
+          <button class="end-again" id="end-play-again" type="button">Play again</button>
+        </div>
+      </div>
+
+      <!-- sign-up page: opened from WORK WITH US on the end screen -->
+      <div class="end-screen" id="apply-screen" hidden>
+        <img class="end-food" src="../photos/food/fries.png" style="left:13%; top:5%; width:118px; rotate:-10deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:50%; top:4%; width:130px; rotate:4deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:87%; top:6%; width:100px; rotate:14deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:6%; top:16%; width:96px; rotate:-14deg" alt="">
+        <img class="end-food" src="../photos/food/fries.png" style="left:95%; top:18%; width:112px; rotate:12deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:3%; top:47%; width:120px; rotate:-8deg" alt="">
+        <img class="end-food" src="../photos/food/fries.png" style="left:97%; top:53%; width:110px; rotate:14deg" alt="">
+        <img class="end-food" src="../photos/food/fries.png" style="left:9%; top:92%; width:116px; rotate:-8deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:25%; top:96%; width:92px; rotate:-10deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:50%; top:95%; width:136px; rotate:-4deg" alt="">
+        <img class="end-food" src="../photos/drinks-desserts/soda.png" style="left:91%; top:88%; width:100px; rotate:12deg" alt="">
+        <img class="end-food" src="../photos/food/burger.png" style="left:82%; top:98%; width:118px; rotate:6deg" alt="">
+        <div class="end-card apply-card">
+          <button class="apply-back" id="apply-back" type="button">&lsaquo; Back</button>
+          <div class="end-icon apply-icon">
+            <span class="end-ray left-top"></span><span class="end-ray left-bottom"></span>
+            <img src="../photos/food/fries.png" alt="">
+            <span class="end-ray right-top"></span><span class="end-ray right-bottom"></span>
+          </div>
+
+          <div id="apply-form-view">
+            <h2 class="apply-title">Fancy a real shift?</h2>
+            <p class="apply-sub">Leave your details. We&rsquo;ll take it from here.</p>
+
+            <form class="apply-form" id="apply-form" novalidate>
+              <label for="apply-name">Full name</label>
+              <input id="apply-name" name="name" type="text" autocomplete="name" placeholder="Your full name" required>
+
+              <label for="apply-phone">Phone number</label>
+              <input id="apply-phone" name="phone" type="tel" autocomplete="tel" placeholder="Your phone number" required>
+
+              <label for="apply-email">Email</label>
+              <input id="apply-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+
+              <label for="apply-city">Preferred city</label>
+              <div class="apply-select">
+                <select id="apply-city" name="city" required>
+                  <option value="" disabled selected>Choose a city</option>
+                </select>
+              </div>
+
+              <p class="apply-error" id="apply-error" hidden></p>
+              <button class="end-cta apply-send" type="submit">SEND MY DETAILS</button>
+            </form>
+          </div>
+
+          <div class="apply-thanks" id="apply-thanks" hidden>
+            <h2 class="apply-title">Thanks<span id="apply-thanks-name"></span>!</h2>
+            <p class="apply-sub">We&rsquo;ve got your details and we&rsquo;ll be in touch about your next shift.</p>
+          </div>
+
+          <p class="apply-note">We&rsquo;ll only use your details to contact you about jobs.</p>
+          <a class="apply-link" id="open-positions" href="#" target="_blank" rel="noopener">Browse open positions</a>
+        </div>
+      </div>
+
+      <!-- loading error message, shown over the game -->
+      <div class="recipes-overlay" id="game-overlay" hidden>
+        <div class="recipes-panel game-panel" role="dialog" aria-modal="true" aria-labelledby="game-title">
+          <h2 class="recipes-title" id="game-title">TIME'S UP!</h2>
+          <p class="game-message" id="game-message"></p>
+          <div class="game-buttons" id="game-buttons">
+            <button class="game-btn" id="play-again" type="button">PLAY AGAIN</button>
+            <a class="game-btn secondary" href="../index.html">HOME</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- recipes page, shown over the game with the background dimmed -->
+      <div class="recipes-overlay" id="recipes-overlay" hidden>
+        <div class="recipes-panel book-panel" role="dialog" aria-modal="true" aria-labelledby="recipes-title">
+          <button class="recipes-close" id="recipes-close" type="button" aria-label="Close">&times;</button>
+          <div class="book-header">
+            <img src="../photos/ui/recipe-book.png" alt="">
+            <h2 class="book-title" id="recipes-title">Recipes</h2>
+          </div>
+          <p class="recipes-hint">Start with the bottom bun. Finish with the top.</p>
+          <div class="recipes-list" id="recipes-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="orders.js"></script>
+  <script src="setup.js"></script>
+  <script src="gameplay.js"></script>
+  <script src="screens.js"></script>
+</body>
+</html>

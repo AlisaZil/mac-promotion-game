@@ -1,0 +1,32 @@
+{
+  "recipes": [
+    {
+      "id": "big-mac",
+      "name": "Big Mac",
+      "layers": ["lettuce", "cheese", "beef-patty", "lettuce", "pickles", "beef-patty"],
+      "sauces": [],
+      "notInGame": ["middle bun", "Big Mac sauce", "onions"]
+    },
+    {
+      "id": "quarter-pounder-cheese",
+      "name": "Quarter Pounder with Cheese",
+      "layers": ["cheese", "beef-patty", "cheese", "pickles"],
+      "sauces": ["ketchup-bottle", "mustard-bottle"],
+      "notInGame": ["onions"]
+    },
+    {
+      "id": "mcchicken",
+      "name": "McChicken",
+      "layers": ["chicken-cutlet", "lettuce"],
+      "sauces": ["mayo-bottle"],
+      "notInGame": []
+    },
+    {
+      "id": "cheeseburger",
+      "name": "Cheeseburger",
+      "layers": ["beef-patty", "cheese", "pickles"],
+      "sauces": ["ketchup-bottle", "mustard-bottle"],
+      "notInGame": ["onions"]
+    }
+  ]
+}

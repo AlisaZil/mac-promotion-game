@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Start Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #dc1f1f;
+      --yellow: #fbd66e;
+      --brown: #3b1a0c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--red);
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Phone-shaped screen, same proportions as the mockup (941 x 1672).
+       Fills the height on desktop, the width on phones. */
+    .screen {
+      position: relative;
+      width: min(100vw, 100dvh * 941 / 1672);
+      aspect-ratio: 941 / 1672;
+      background: var(--red);
+      container-type: inline-size;
+      overflow: hidden;
+    }
+
+    /* Scattered food. --x / --y are the item's centre in % of the screen,
+       --w its width in % of the screen width, --r its tilt. */
+    .item {
+      position: absolute;
+      left: calc(var(--x) * 1%);
+      top: calc(var(--y) * 1%);
+      width: calc(var(--w) * 1cqw);
+      transform: translate(-50%, -50%) rotate(calc(var(--r, 0) * 1deg));
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .start-btn {
+      position: absolute;
+      left: 50%;
+      top: 48.4%;
+      transform: translate(-50%, -50%);
+      width: 59.5cqw;
+      height: 16.5cqw;
+      border: 0.75cqw solid var(--brown);
+      border-radius: 999px;
+      background: var(--yellow);
+      color: var(--brown);
+      font-family: "Fredoka", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 7.4cqw;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+
+    .start-btn:hover { transform: translate(-50%, -50%) scale(1.04); }
+    .start-btn:active { transform: translate(-50%, -50%) scale(0.97); }
+  </style>
+</head>
+<body>
+  <main class="screen">
+    <!-- row 1 -->
+    <img class="item" src="photos/ingredients/burger-bun.png"     style="--x:12; --y:6.6;  --w:12; --r:-6"  alt="">
+    <img class="item" src="photos/food/fries.png"                 style="--x:41; --y:6;    --w:11; --r:-10" alt="">
+    <img class="item" src="photos/ingredients/pickles.png"        style="--x:65; --y:4.4;  --w:8;  --r:8"   alt="">
+    <img class="item" src="photos/food/nuggets.png"               style="--x:90; --y:5.9;  --w:10; --r:-12" alt="">
+
+    <!-- row 2 -->
+    <img class="item" src="photos/food/nuggets.png"               style="--x:28; --y:13.4; --w:10; --r:10"  alt="">
+    <img class="item" src="photos/ingredients/cheese.png"         style="--x:71; --y:11.8; --w:9;  --r:14"  alt="">
+    <img class="item" src="photos/drinks-desserts/soda.png"       style="--x:9;  --y:18;   --w:9;  --r:-14" alt="">
+    <img class="item" src="photos/drinks-desserts/ice-cream-cone.png" style="--x:46; --y:19.7; --w:7.5; --r:12" alt="">
+    <img class="item" src="photos/drinks-desserts/soda.png"       style="--x:90; --y:17.8; --w:9;  --r:16"  alt="">
+
+    <!-- row 3 -->
+    <img class="item" src="photos/ingredients/pickles.png"        style="--x:27.5; --y:23.6; --w:8; --r:-14" alt="">
+    <img class="item" src="photos/ingredients/burger-bun.png"     style="--x:69; --y:23.9; --w:12; --r:4"   alt="">
+
+    <!-- row 4 -->
+    <img class="item" src="photos/food/fries.png"                 style="--x:11.7; --y:31.5; --w:11; --r:12" alt="">
+    <img class="item" src="photos/ingredients/cheese.png"         style="--x:32.5; --y:33.2; --w:9; --r:-12" alt="">
+    <img class="item" src="photos/ingredients/pickles.png"        style="--x:56.5; --y:32.8; --w:8; --r:6"   alt="">
+    <img class="item" src="photos/drinks-desserts/ice-cream-cone.png" style="--x:89.6; --y:32.1; --w:7.5; --r:-14" alt="">
+
+    <!-- row 5 -->
+    <img class="item" src="photos/food/nuggets.png"               style="--x:77.4; --y:38.1; --w:10; --r:16" alt="">
+    <img class="item" src="photos/food/nuggets.png"               style="--x:10;   --y:42.3; --w:10; --r:-8" alt="">
+
+    <!-- around the button -->
+    <img class="item" src="photos/food/fries.png"                 style="--x:92.5; --y:47.8; --w:11; --r:12" alt="">
+    <img class="item" src="photos/ingredients/pickles.png"        style="--x:7.8;  --y:51.9; --w:8;  --r:-6" alt="">
+
+    <!-- row 6 -->
+    <img class="item" src="photos/drinks-desserts/soda.png"       style="--x:19.4; --y:60.1; --w:9; --r:-14" alt="">
+    <img class="item" src="photos/ingredients/pickles.png"        style="--x:88.5; --y:59;   --w:8; --r:10"  alt="">
+    <img class="item" src="photos/ingredients/cheese.png"         style="--x:72;   --y:62.4; --w:9; --r:12"  alt="">
+
+    <!-- row 7 -->
+    <img class="item" src="photos/ingredients/burger-bun.png"     style="--x:46.8; --y:65.6; --w:12; --r:-8" alt="">
+    <img class="item" src="photos/drinks-desserts/ice-cream-cone.png" style="--x:9.6; --y:69.1; --w:7.5; --r:-8" alt="">
+    <img class="item" src="photos/drinks-desserts/soda.png"       style="--x:90.3; --y:69.7; --w:9; --r:12"  alt="">
+
+    <!-- row 8 -->
+    <img class="item" src="photos/ingredients/pickles.png"        style="--x:29;   --y:73.1; --w:8;  --r:-12" alt="">
+    <img class="item" src="photos/food/nuggets.png"               style="--x:66.2; --y:73.7; --w:10; --r:12"  alt="">
+
+    <!-- row 9 -->
+    <img class="item" src="photos/food/fries.png"                 style="--x:11.7; --y:82;   --w:11; --r:-6" alt="">
+    <img class="item" src="photos/food/fries.png"                 style="--x:44.6; --y:82.2; --w:11; --r:10" alt="">
+    <img class="item" src="photos/drinks-desserts/ice-cream-cone.png" style="--x:85; --y:81.3; --w:7.5; --r:-10" alt="">
+    <img class="item" src="photos/ingredients/pickles.png"        style="--x:67.8; --y:86.2; --w:8;  --r:8"  alt="">
+
+    <!-- bottom row -->
+    <img class="item" src="photos/ingredients/cheese.png"         style="--x:28.7; --y:89.4; --w:9;  --r:-16" alt="">
+    <img class="item" src="photos/food/nuggets.png"               style="--x:10.6; --y:93.2; --w:10; --r:8"   alt="">
+    <img class="item" src="photos/drinks-desserts/soda.png"       style="--x:53;   --y:94;   --w:9;  --r:-8"  alt="">
+    <img class="item" src="photos/ingredients/burger-bun.png"     style="--x:87;   --y:92.7; --w:12; --r:-6"  alt="">
+
+    <button class="start-btn" type="button" onclick="location.href = 'game-screen/index.html'">START GAME</button>
+  </main>
+</body>
+</html>
