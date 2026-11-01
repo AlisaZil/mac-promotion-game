@@ -251,7 +251,32 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 
 /* ---------- tray ---------- */
 .tray { left: 140px; top: 1158px; width: 524px; height: 336px; }
-.tray > img { width: 100%; height: 100%; }
+/* The tray is drawn with CSS (same colours as photos/ui/tray.png), so it keeps
+   its shape at any size instead of stretching a picture. */
+.tray::before {                      /* the tray itself */
+  content: "";
+  position: absolute;
+  inset: 4% 6% 4%;
+  border: 6px solid #3b1a06;
+  border-radius: 38px;
+  background: #fddf7e;
+  box-shadow:
+    inset 0 -14px 0 #d99b35,         /* darker edge along the bottom, inside the outline */
+    inset 0 0 0 20px #fbc64a,        /* yellow rim */
+    inset 0 -14px 0 20px #fbc64a,    /* rim continues above the bottom edge */
+    inset 0 0 0 25px #f2b435;        /* thin golden line inside the rim */
+}
+.tray-handle {                       /* wooden handles on both sides */
+  position: absolute;
+  top: 30%; height: 36%;
+  width: 7%;
+  border: 5px solid #3b1a06;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ac886a 50%, #8e6446 50%);
+}
+.tray-handle.left { left: 1.5%; }
+.tray-handle.right { right: 1.5%; transform: scaleX(-1); }
+.tray-food { z-index: 1; }
 /* items placed on the tray: up to 3 main items in one row (all the same
    size as a burger), sauce packets in a smaller row underneath */
 .tray-food {

@@ -24,6 +24,7 @@
 // Clicking something on the tray takes it off again.
 function handleItemClick(el) {
   restartAnimation(el, "press");
+  playClickSound();
 
   const id = el.dataset.id;
   const src = (el.tagName === "IMG" ? el : el.querySelector("img")).src;
@@ -41,6 +42,27 @@ function selectItemTab(name) {
   document.querySelectorAll(".item-tab").forEach(function (tab) {
     tab.classList.toggle("active", tab.dataset.tab === name);
   });
+}
+
+// A short "bop" when an item is tapped (bop 1 or bop 2, at random).
+// Each sound is loaded once; cloning lets quick taps overlap.
+const clickSounds = CLICK_SOUNDS.map(function (src) {
+  const audio = new Audio(src);
+  audio.preload = "auto";
+  return audio;
+});
+const successSound = new Audio(SUCCESS_SOUND);
+successSound.preload = "auto";
+function playSuccessSound() {
+  const sound = successSound.cloneNode();
+  sound.volume = SUCCESS_VOLUME;
+  sound.play().catch(function () {});
+}
+
+function playClickSound() {
+  const sound = clickSounds[Math.floor(Math.random() * clickSounds.length)].cloneNode();
+  sound.volume = CLICK_VOLUME;
+  sound.play().catch(function () {}); // ignore if the browser blocks sound
 }
 
 // How many main items are on the tray (everything except packets and dips).
@@ -211,7 +233,10 @@ function react(good) {
   customerEl.src = (good ? customer.happy : customer.angry);
   customerEl.classList.remove("arrive");
   restartAnimation(customerEl, good ? "happy" : "angry");
-  if (good) restartAnimation(heartEl, "show");
+  if (good) {
+    restartAnimation(heartEl, "show");
+    playSuccessSound();
+  }
 }
 
 // The customer walks out to the left, then the next one walks in from the right.

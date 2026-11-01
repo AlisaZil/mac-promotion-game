@@ -49,6 +49,14 @@ const TOP_BUN_GAP = 34;  // top bun sits this much above the last layer
 const LAYER_HEIGHT = 88; // about how tall an ingredient picture is at 100px wide
 const TOP_BUN_HEIGHT = 62;
 
+// Sounds
+const CLICK_SOUNDS = ["sound/bop_1.mp3", "sound/bop_2.mp3"]; // one is picked at random on each item tap
+const CLICK_VOLUME = 0.6;
+// plays when a correct order (or sauce request) is served.
+// success.mp3 with the 1.4s of silence at the start cut off.
+const SUCCESS_SOUND = "sound/success-trimmed.wav";
+const SUCCESS_VOLUME = 0.7;
+
 // Animation timings (ms)
 const LOADING_MIN_MS = 900; // the loading screen shows at least this long
 const SEND_MS = 600;      // tray flying to the customer
