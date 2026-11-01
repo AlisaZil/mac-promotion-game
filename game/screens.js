@@ -3,16 +3,72 @@
 // =====================================================================
 // The extra screens, the button hookups, and starting the game.
 //
-//   13. Tutorial            - first-time walkthrough
-//   14. Recipe book         - the recipes page
-//   15. Sign-up page        - "Fancy a real shift?" form
-//   16. Event listeners     - connects buttons and clicks to the functions
-//   17. Start               - runs when the page loads
+//   13. Loading screen      - "Almost ready..." while the pictures load, then the start screen
+//   14. Tutorial            - first-time walkthrough
+//   15. Recipe book         - the recipes page
+//   16. Sign-up page        - "Fancy a real shift?" form
+//   17. Event listeners     - connects buttons and clicks to the functions
+//   18. Start               - runs when the page loads
 //
-// Load order (see index.html): orders.js, setup.js, gameplay.js, screens.js. This file must be last.
+// Load order (see index.html): orders.js, setup.js, gameplay.js, screens.js (all in game/).
+// This file must be last.
 
 // =====================================================================
-// 13. Tutorial (first time only)
+// 13. Loading screen
+// =====================================================================
+// Shows "Almost ready..." and fills the bar as the pictures load: every picture
+// on the page, plus the ones that only appear later (customer faces, sauce
+// toppings, bun halves...). Then it fades out.
+
+// Every picture the game will show, as a list of addresses.
+function allPictures(data) {
+  const urls = new Set();
+  document.querySelectorAll("img").forEach((img) => urls.add(img.src));
+  urls.add(new URL("photos/backgrounds/kitchen.png", location.href).href);
+  const add = (path) => urls.add(new URL(path, location.href).href);
+  for (const category of Object.keys(data.items)) data.items[category].forEach((item) => add(item.image));
+  for (const c of data.customers.customers) { add(c.image); add(c.happy); add(c.angry); }
+  for (const src of Object.values(SAUCE_TOPPINGS)) urls.add(new URL(src, location.href).href);
+  ["photos/ingredients/bun-top.png", "photos/ingredients/bun-bottom.png",
+   "photos/ui/heart.png", "photos/ui/talk-bubble.png"].forEach(add);
+  return [...urls];
+}
+
+// Loads the pictures and moves the bar. Resolves when all are done (a picture
+// that fails to load still counts, so the game never gets stuck here).
+function preloadPictures(urls) {
+  let done = 0;
+  return Promise.all(urls.map((url) => new Promise(function (resolve) {
+    const img = new Image();
+    img.onload = img.onerror = function () {
+      done++;
+      loadingFill.style.width = Math.round((done / urls.length) * 100) + "%";
+      resolve();
+    };
+    img.src = url;
+  })));
+}
+
+function hideLoading() {
+  loadingScreen.classList.add("done");
+  setTimeout(function () { loadingScreen.hidden = true; }, 400);
+}
+
+// The "Happy Little Orders" start screen, shown once everything is loaded.
+// START GAME begins the tutorial (first time) or the game.
+function showStartScreen() {
+  startScreen.hidden = false;
+}
+
+function handleStartClick() {
+  startScreen.hidden = true;
+  document.body.classList.remove("cream"); // back to the game's green sides
+  if (tutorialSeen()) startGame();
+  else startTutorial();
+}
+
+// =====================================================================
+// 14. Tutorial (first time only)
 // =====================================================================
 // Highlights one area at a time and dims the rest, with a popup next to it.
 // The timer only starts once the tutorial is finished or skipped.
@@ -81,7 +137,7 @@ function placeTutorial() {
 }
 
 // =====================================================================
-// 14. Recipe book
+// 15. Recipe book
 // =====================================================================
 // Opens over the game with the background dimmed. Close with the X,
 // by clicking the dim background, or with Escape. The timer keeps running.
@@ -109,12 +165,12 @@ async function loadRecipes() {
 function renderRecipes(recipes, items) {
   // item id -> { name, image }
   const lookup = {
-    "bun-bottom": { name: "Bottom bun", image: "../photos/ingredients/bun-bottom.png" },
-    "bun-top": { name: "Top bun", image: "../photos/ingredients/bun-top.png" },
+    "bun-bottom": { name: "Bottom bun", image: "photos/ingredients/bun-bottom.png" },
+    "bun-top": { name: "Top bun", image: "photos/ingredients/bun-top.png" },
   };
   for (const category of Object.keys(items)) {
     for (const item of items[category]) {
-      lookup[item.id] = { name: item.name, image: "../" + item.image };
+      lookup[item.id] = { name: item.name, image: item.image };
     }
   }
 
@@ -178,7 +234,7 @@ function renderRecipes(recipes, items) {
 }
 
 // =====================================================================
-// 15. Sign-up page ("Fancy a real shift?")
+// 16. Sign-up page ("Fancy a real shift?")
 // =====================================================================
 // Opened from WORK WITH US on the end screen.
 
@@ -243,7 +299,7 @@ function clearFieldError(e) {
 }
 
 // =====================================================================
-// 16. Event listeners
+// 17. Event listeners
 // =====================================================================
 // screen size
 window.addEventListener("resize", fit);
@@ -279,6 +335,9 @@ document.addEventListener("keydown", function (e) {
   if (e.key === "Escape" && !recipesOverlay.hidden) closeRecipes();
 });
 
+// start screen
+document.getElementById("start-btn").addEventListener("click", handleStartClick);
+
 // sign-up page
 document.getElementById("work-with-us").addEventListener("click", openApply);
 document.getElementById("apply-back").addEventListener("click", closeApply);
@@ -286,13 +345,20 @@ applyForm.addEventListener("submit", handleApplySubmit);
 applyForm.addEventListener("input", clearFieldError);
 
 // =====================================================================
-// 17. Start
+// 18. Start
 // =====================================================================
 fit();
 fillCityList();
 document.getElementById("open-positions").href = OPEN_POSITIONS_URL;
 
-loadData().then(function () {
-  if (tutorialSeen()) startGame();
-  else startTutorial();
-}, showLoadError);
+const loadingStarted = Date.now();
+loadData()
+  .then((data) => preloadPictures(allPictures(data)))
+  .then(function () {
+    // keep the loading screen up for a moment so it doesn't just flash
+    const wait = Math.max(0, LOADING_MIN_MS - (Date.now() - loadingStarted));
+    setTimeout(function () {
+      showStartScreen();
+      hideLoading();
+    }, wait);
+  }, showLoadError);

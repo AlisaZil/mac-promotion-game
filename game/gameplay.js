@@ -11,7 +11,7 @@
 //   12. Game flow           - start, timer, end
 //
 // Uses makeOrders() and makeSauceRequest() from orders.js.
-// Load order (see index.html): orders.js, setup.js, gameplay.js, screens.js.
+// Load order (see index.html): orders.js, setup.js, gameplay.js, screens.js (all in game/).
 
 // =====================================================================
 // 7. Tray & burgers
@@ -45,7 +45,7 @@ function startBurger() {
   const burger = document.createElement("div");
   burger.className = "burger";
   burger.title = "Click to remove";
-  burger.appendChild(makeImg("../photos/ingredients/bun-bottom.png", "bun-bottom"));
+  burger.appendChild(makeImg("photos/ingredients/bun-bottom.png", "bun-bottom"));
   burger.addEventListener("click", function () {
     if (burger === openBurger) openBurger = null;
     burger.remove();
@@ -71,7 +71,7 @@ function addLayer(src, id, extraClass) {
 
 function closeBurger() {
   const n = layerCount(openBurger);
-  const topBun = makeImg("../photos/ingredients/bun-top.png", "bun-top");
+  const topBun = makeImg("photos/ingredients/bun-top.png", "bun-top");
   topBun.style.bottom = (n ? LAYER_FIRST + (n - 1) * LAYER_STEP + TOP_BUN_GAP : 26) + "px";
   openBurger.appendChild(topBun);
   openBurger.style.height = parseInt(topBun.style.bottom) + TOP_BUN_HEIGHT + "px";
@@ -156,7 +156,7 @@ function showOrder(order) {
   }
   fitOrderText();
 
-  customerEl.src = "../" + order.customer.image;
+  customerEl.src = order.customer.image;
   customerEl.alt = order.customer.name;
   restartAnimation(customerEl, "arrive");
 }
@@ -196,7 +196,7 @@ function popPoints(text, good) {
 // Happy face with a heart popping up, or angry face with a shake.
 function react(good) {
   const customer = currentOrder.customer;
-  customerEl.src = "../" + (good ? customer.happy : customer.angry);
+  customerEl.src = (good ? customer.happy : customer.angry);
   customerEl.classList.remove("arrive");
   restartAnimation(customerEl, good ? "happy" : "angry");
   if (good) restartAnimation(heartEl, "show");
@@ -217,11 +217,11 @@ function leaveAndNext() {
 function askForSauce() {
   sauceRequest = makeSauceRequest(gameData.items);
   customerEl.classList.remove("happy", "angry");
-  customerEl.src = "../" + currentOrder.customer.image;
+  customerEl.src = currentOrder.customer.image;
 
   bubbleItems.innerHTML = "";
   for (const packet of sauceRequest) {
-    const img = makeImg("../" + packet.image);
+    const img = makeImg(packet.image);
     img.alt = packet.name;
     bubbleItems.appendChild(img);
   }
@@ -405,6 +405,7 @@ function endGame() {
 }
 
 function showLoadError() {
+  loadingScreen.hidden = true;
   gameTitle.textContent = "OOPS!";
   gameMessage.innerHTML =
     "The game couldn't load its data.<br>" +

@@ -22,7 +22,7 @@ html, body {
 body { display: flex; align-items: center; justify-content: center; }
 
 /* The screen is laid out at the mockup's size (941 x 1672) and scaled
-   to fit the window by script.js. */
+   to fit the window by fit() in setup.js. */
 .viewport { position: relative; }
 .stage {
   position: absolute;
@@ -40,7 +40,7 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 /* ---------- shop frame ---------- */
 .shop {
   left: 60px; top: 0;
-  width: 822px; height: 100%;     /* the stage gets taller on phones, see script.js */
+  width: 822px; height: 100%;     /* the stage gets taller on phones, see fit() in setup.js */
   background: var(--cream);
   overflow: hidden;
 }
@@ -803,11 +803,94 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 }
 
 /* ---------- sending the tray ---------- */
-/* the copy of the tray that flies to the customer (moved by script.js) */
+/* the copy of the tray that flies to the customer (moved by sendTray() in gameplay.js) */
 .flying-tray { z-index: 4; pointer-events: none; transform-origin: center; }
 /* the real tray comes back empty */
 .tray.tray-in { animation: tray-in 0.35s ease-out 0.25s backwards; }
 @keyframes tray-in { from { opacity: 0; translate: 0 40px; } }
+
+/* ---------- start screen ("Happy Little Orders") ---------- */
+.start-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  background: #fdfaee;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #4b2a19;
+}
+.start-screen[hidden] { display: none; }
+.start-arches { width: 124px; }
+.start-title {
+  margin-top: 26px;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -1px;
+}
+.start-title .line1 { display: block; font-size: 108px; }
+.start-title .line2 { display: block; font-size: 104px; }
+
+/* the three friends with the food in front of them */
+.start-friends { position: relative; width: 820px; height: 486px; margin-top: 66px; }
+.start-friends img { position: absolute; translate: -50% 0; }
+/* own class names (sf-...) so the game's .burger / .heart styles don't apply here */
+.start-friends .sf-orange { left: 162px; top: 7px;   width: 300px; }
+.start-friends .sf-koala  { left: 655px; top: 27px;  width: 320px; }
+.start-friends .sf-calico { left: 410px; top: 7px;   width: 300px; }
+.start-friends .sf-fries  { left: 300px; top: 235px; width: 168px; }
+.start-friends .sf-soda   { left: 588px; top: 240px; width: 126px; }
+.start-friends .sf-burger { left: 445px; top: 293px; width: 196px; }
+
+/* while the loading / start screen is up, the page around the game is cream too */
+body.cream { background: #fdfaee; }
+
+.start-btn {
+  margin-top: 50px;
+  width: 544px; height: 136px;
+  border: 6px solid #4b2a19;
+  border-radius: 999px;
+  background: #fde27a;
+  box-shadow: inset 0 -8px 0 #f4c84e;
+  color: #4b2a19;
+  font-family: inherit;
+  font-size: 62px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: scale 0.15s ease;
+}
+.start-btn:hover { scale: 1.04; }
+.start-btn:active { scale: 0.97; }
+
+/* ---------- loading screen ---------- */
+.loading-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: #fdfaee;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.4s ease;
+}
+.loading-screen.done { opacity: 0; pointer-events: none; }
+.loading-screen[hidden] { display: none; }
+.loading-arches { width: 260px; margin-bottom: 34px; }
+.loading-title { font-size: 76px; font-weight: 700; color: #8a4b3a; }
+.loading-bar {
+  width: 580px; height: 66px;
+  margin-top: 34px;
+  padding: 7px;
+  border: 5px solid #8a5a48;
+  border-radius: 999px;
+  background: #fde3dc;
+}
+.loading-fill {
+  width: 0%; height: 100%;
+  border-radius: 999px;
+  background: #fcdc6e;
+  box-shadow: 4px 0 0 #fff4c9;      /* the soft highlight at the end of the bar */
+  transition: width 0.25s ease;
+}
+.loading-text { font-size: 32px; font-weight: 600; color: #8a4b3a; margin-top: 30px; }
 
 /* ---------- bottom bar ---------- */
 .floor-line { left: 0; top: 1592px; width: 822px; height: 2px; background: #e7c79a; }
@@ -815,7 +898,7 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 
 /* ---------- phone screens ----------
    On tall phone screens the stage drops the green side strips and gets taller
-   (see fit() in script.js). The extra height is shared out by moving these
+   (see fit() in setup.js). The extra height is shared out by moving these
    groups down: --mid for the item panels, --bot for the tray area, and --rest
    makes the floor at the bottom taller. On a computer all three are 0. */
 .stage.phone .shop { left: 0; }

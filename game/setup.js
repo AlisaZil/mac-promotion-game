@@ -10,7 +10,7 @@
 //    5. Screen size         - fits the game to any window / phone
 //    6. Game data           - loads data/items.json, customers.json, recipes.json
 //
-// Load order (see index.html): orders.js, setup.js, gameplay.js, screens.js.
+// Load order (see index.html): orders.js, setup.js, gameplay.js, screens.js (all in game/).
 
 // =====================================================================
 // 1. Settings
@@ -36,9 +36,9 @@ const BURGER_MAX_LAYERS = 7;
 const BURGER_INGREDIENTS = ["beef-patty", "cheese", "lettuce", "pickles", "tomato", "chicken-cutlet"];
 // Sauce bottles squirt their sauce onto the burger being built.
 const SAUCE_TOPPINGS = {
-  "ketchup-bottle": "../photos/toppings/ketchup.png",
-  "mustard-bottle": "../photos/toppings/mustard.png",
-  "mayo-bottle": "../photos/toppings/mayo.png",
+  "ketchup-bottle": "photos/toppings/ketchup.png",
+  "mustard-bottle": "photos/toppings/mustard.png",
+  "mayo-bottle": "photos/toppings/mayo.png",
 };
 // Burger stacking, in px from the bottom of the burger.
 const LAYER_FIRST = 22;  // first layer sits on the bottom bun
@@ -48,6 +48,7 @@ const LAYER_HEIGHT = 88; // about how tall an ingredient picture is at 100px wid
 const TOP_BUN_HEIGHT = 62;
 
 // Animation timings (ms)
+const LOADING_MIN_MS = 900; // the loading screen shows at least this long
 const SEND_MS = 600;      // tray flying to the customer
 const REACTION_MS = 1100; // customer showing their happy / angry face
 const LEAVE_MS = 600;     // walking out (matches .customer.leave in the CSS)
@@ -103,6 +104,13 @@ const gameOverlay = document.getElementById("game-overlay");
 const gameTitle = document.getElementById("game-title");
 const gameMessage = document.getElementById("game-message");
 const gameButtons = document.getElementById("game-buttons");
+
+// start screen
+const startScreen = document.getElementById("start-screen");
+
+// loading screen
+const loadingScreen = document.getElementById("loading-screen");
+const loadingFill = document.getElementById("loading-fill");
 
 // tutorial
 const tutorialEl = document.getElementById("tutorial");
@@ -225,9 +233,9 @@ function fit() {
 async function loadData() {
   if (gameData) return gameData;
   const [items, customers, recipes] = await Promise.all([
-    fetch("../data/items.json").then((r) => r.json()),
-    fetch("../data/customers.json").then((r) => r.json()),
-    fetch("../data/recipes.json").then((r) => r.json()),
+    fetch("data/items.json").then((r) => r.json()),
+    fetch("data/customers.json").then((r) => r.json()),
+    fetch("data/recipes.json").then((r) => r.json()),
   ]);
   gameData = { items, customers, recipes };
   return gameData;
